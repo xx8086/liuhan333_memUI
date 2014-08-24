@@ -54,9 +54,9 @@ BOOL CKKControlDlg::OnInitDialog()
 
 	ItemStatusImage isi  ;
 	isi.iItemStatusAmount = 3 ; 
-	_stprintf( isi.path[0] , _T("\\skin\\play_normal.png") ) ;
-	_stprintf( isi.path[1] , _T("\\skin\\play_hover.png") ) ;
-	_stprintf( isi.path[2] , _T("\\skin\\play_click.png") ) ;
+	_stprintf( isi.path[0] , _T("\\..\\skin\\play_normal.png") ) ;
+	_stprintf( isi.path[1] , _T("\\..\\skin\\play_hover.png") ) ;
+	_stprintf( isi.path[2] , _T("\\..\\skin\\play_click.png") ) ;
 
 	RECT rc ;
 	SetRect( &rc , 50 , 50 , 50 + 203 , 50 + 40 ) ;
