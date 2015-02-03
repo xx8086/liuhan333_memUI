@@ -123,11 +123,12 @@ BOOL    CKKUIBase::OnMouseHover( POINT pt )
 
 BOOL    CKKUIBase::OnLButtonUp( POINT pt ) 
 {
-	BOOL rt = FALSE ;
-	if( InPoint( m_rc , pt )  )
-		rt = TRUE ;
+	//BOOL rt = FALSE ;
+	//if( InPoint( m_rc , pt )  )
+	//	rt = TRUE ;
 
-	return FALSE ;
+	//return FALSE ;
+	return OnMouseHover(pt);
 };
 BOOL    CKKUIBase::OnMouseMove( POINT pt )
 {

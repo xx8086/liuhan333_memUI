@@ -204,6 +204,8 @@ void CKKControlDlg::OnMouseMove(UINT nFlags, CPoint point)
 void CKKControlDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	m_btn[0].OnLButtonUp( (POINT)point  );
+	m_btn[1].OnLButtonUp( (POINT)point  ) ;
 	m_edit[1].OnLbuttonUp() ;
 	m_edit[0].OnLbuttonUp() ;
 	CDialogEx::OnLButtonUp(nFlags, point);
