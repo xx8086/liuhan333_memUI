@@ -6,6 +6,8 @@
 
 #include "Common\KKUIButton.h"
 #include "Common\KKUIEdit.h"
+#include "loadgif\BaseGif.h"
+
 // CKKControlDlg ¶Ô»°¿ò
 class CKKControlDlg : public CDialogEx
 {
@@ -33,6 +35,8 @@ protected:
 private:
 	CKKUIButton m_btn[2] ;
 	CKKUIEdit	m_edit[2] ;
+
+	
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);

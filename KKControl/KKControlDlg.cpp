@@ -14,7 +14,7 @@
 
 // CKKControlDlg 对话框
 
-
+CGifContrl	m_gif[2];
 
 
 CKKControlDlg::CKKControlDlg(CWnd* pParent /*=NULL*/)
@@ -77,6 +77,24 @@ BOOL CKKControlDlg::OnInitDialog()
 		rc.left + 4, rc.top + ( rc.bottom - rc.top ) / 3
 		,210 , _T("123456abcd密码") ,
 		EDIT_PASSWORD );
+
+
+	TCHAR DirectoryPath[MAX_PATH] ;
+	memset( DirectoryPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
+	DWORD dr = m_btn[0].GetModulePath( MAX_PATH , DirectoryPath ) ;
+	TCHAR GifPath[MAX_PATH] ;
+	memset( GifPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
+	_stprintf(GifPath, _T("%s\\..\\skin\\1.gif"), DirectoryPath ) ;
+
+	SetRect( &rc , 200 , 250 , 200+35 , 250+38 ) ;
+	CGifContrl::AddGifContrl( &m_gif[0] ) ;
+	m_gif[0].CreateCtrntrl( GetSafeHwnd() , AfxGetInstanceHandle() ,rc , GifPath , true ); 
+
+	memset( GifPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
+	_stprintf(GifPath, _T("%s\\..\\skin\\2.gif"), DirectoryPath ) ;
+	SetRect( &rc , 250 , 250 , 250+250 , 250+179 ) ;
+	CGifContrl::AddGifContrl( &m_gif[1] ) ;
+	m_gif[1].CreateCtrntrl( GetSafeHwnd() ,  AfxGetInstanceHandle() ,rc ,GifPath ); 
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

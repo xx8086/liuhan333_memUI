@@ -16,6 +16,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Gif">
+      <UniqueIdentifier>{58895ae8-e275-4428-acb0-5c7e890d903d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -60,6 +63,9 @@
     <ClInclude Include="Common\BaseConfig.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="loadgif\BaseGif.h">
+      <Filter>Gif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KKControl.cpp">
@@ -85,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="Common\KKUIFrame.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="loadgif\BaseGif.cpp">
+      <Filter>Gif</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
