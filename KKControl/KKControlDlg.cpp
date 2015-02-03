@@ -14,8 +14,6 @@
 
 // CKKControlDlg ¶Ô»°¿ò
 
-CGifContrl	m_gif[2];
-
 
 CKKControlDlg::CKKControlDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CKKControlDlg::IDD, pParent)

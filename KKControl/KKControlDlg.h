@@ -35,7 +35,7 @@ protected:
 private:
 	CKKUIButton m_btn[2] ;
 	CKKUIEdit	m_edit[2] ;
-
+	CGifContrl	m_gif[2];
 	
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
