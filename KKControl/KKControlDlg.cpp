@@ -86,13 +86,13 @@ BOOL CKKControlDlg::OnInitDialog()
 
 	SetRect( &rc , 200 , 250 , 200+35 , 250+38 ) ;
 	CGifContrl::AddGifContrl( &m_gif[0] ) ;
-	m_gif[0].CreateCtrntrl( GetSafeHwnd() , AfxGetInstanceHandle() ,rc , GifPath , true ); 
+	m_gif[0].CreateControl( GetSafeHwnd(), AfxGetInstanceHandle(), rc, GifPath, true ); 
 
 	memset( GifPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
 	_stprintf(GifPath, _T("%s\\..\\skin\\2.gif"), DirectoryPath ) ;
-	SetRect( &rc , 250 , 250 , 250+250 , 250+179 ) ;
+	SetRect( &rc, 250, 250, 250+250, 250+179 ) ;
 	CGifContrl::AddGifContrl( &m_gif[1] ) ;
-	m_gif[1].CreateCtrntrl( GetSafeHwnd() ,  AfxGetInstanceHandle() ,rc ,GifPath ); 
+	m_gif[1].CreateControl( GetSafeHwnd(),  AfxGetInstanceHandle(), rc, GifPath ); 
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

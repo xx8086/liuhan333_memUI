@@ -2,7 +2,7 @@
 #include <GdiPlus.h>
 using namespace Gdiplus;
 
-#define MAX_GIF_NUMBER		( 102 ) 
+#define MAX_GIF_NUMBER		( 128 ) 
 class CGifContrl
 {
 public:
@@ -12,18 +12,18 @@ public:
 	static LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 	static void AddGifContrl( CGifContrl* addGif );
 public:
-	void DreawGif(const HDC* pHdc ) ;
-	void CreateCtrntrl(HWND fhwnd , HINSTANCE hInstance, RECT rc , const TCHAR*  szName , bool bsrase = false );
+	void DrawGif(const HDC* pHdc ) ;
+	void CreateControl(HWND fhwnd , HINSTANCE hInstance, RECT& rc , const TCHAR*  szName , bool bsrase = false );
 	void AddCount();
-	bool LoadGif( const TCHAR* szName ) ;
+	bool LoadGif(const TCHAR* szName, RECT& rc);
 	bool InRect(RECT rc );
 	bool IsHWND(HWND hwnd){ return (hwnd == m_hwnd );}
 	void SetIndex(int index ) { m_index = index ;} 
 	void ClearUP( ) ;
 	void Init() ;
 
-	int GetCount(){ return m_fcount ; }
-	unsigned int GetFrameCounnt(){ return m_frameCount ; }
+	int GetCount(){ return m_iFCount ; }
+	unsigned int GetFrameCounnt(){ return m_unFrameAmount ; }
 	Image* GetImage(){ return m_image; }
 	PropertyItem* GetItem(){ return m_pItem  ;}
 	
@@ -33,14 +33,14 @@ private:
 	static int s_iGifCount ;
 
 
-	RECT m_rc;
-	int m_fcount  ;
-	unsigned int  m_frameCount  ;
-	Image* m_image  ;
-	PropertyItem* m_pItem  ;
-	HWND m_hwnd ;
-	int m_index  ;
-	bool	m_bErase ;
+	RECT			m_rc ;
+	int				m_iFCount  ;
+	unsigned int	m_unFrameAmount  ;
+	Image*			m_image  ;
+	PropertyItem*	m_pItem  ;
+	HWND			m_hwnd ;
+	int				m_index  ;
+	bool			m_bErase ;
 };
 
 

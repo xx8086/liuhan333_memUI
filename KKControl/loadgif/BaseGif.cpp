@@ -11,7 +11,7 @@
 
 
 
-	CGifContrl::CGifContrl():m_index(0),m_image(NULL),m_pItem(NULL),m_hwnd(NULL),m_fcount(0),m_bErase(false)
+	CGifContrl::CGifContrl():m_index(0),m_image(NULL),m_pItem(NULL),m_hwnd(NULL),m_iFCount(0),m_bErase(false)
 	{}
 	CGifContrl::~CGifContrl() 
 	{}
@@ -22,9 +22,9 @@
 		s_Gif[s_iGifCount]->SetIndex(s_iGifCount);
 		s_iGifCount++ ;
 	}
-	void CGifContrl::CreateCtrntrl(HWND fhwnd , HINSTANCE hInstance , RECT rc , const TCHAR*  szName , bool bsrase )
+	void CGifContrl::CreateControl(HWND fhwnd , HINSTANCE hInstance , RECT& rc , const TCHAR*  szName , bool bsrase )
 	{
-		if( false == LoadGif( szName ))
+		if( false == LoadGif( szName, rc ))
 			return ;
 
 		WNDCLASSEX wcex;
@@ -69,13 +69,13 @@
 			return ;
 
 		GUID    Guid = FrameDimensionTime;
-		m_image->SelectActiveFrame(&Guid,m_fcount++);
-		if(m_fcount == m_frameCount) //frameCount是上面GetFrameCount返回值
-			m_fcount= 0;     //如果到了最后一帧数据又重新开始
+		m_image->SelectActiveFrame(&Guid,m_iFCount++);
+		if(m_iFCount == m_unFrameAmount) //frameCount是上面GetFrameCount返回值
+			m_iFCount= 0;     //如果到了最后一帧数据又重新开始
 		//计算此帧要延迟的时间
-		long lPause = ((long*)m_pItem->value)[m_fcount]*10;
+		long lPause = ((long*)m_pItem->value)[m_iFCount]*10;
 		SetTimer(m_hwnd,TIMER_SEC,lPause,NULL);
-		InvalidateRect (m_hwnd, &m_rc ,m_bErase) ;
+		InvalidateRect (m_hwnd, &m_rc, m_bErase) ;
 	}
 
 	bool CGifContrl::InRect(RECT rc )
@@ -108,7 +108,7 @@
 		}
 	}
 
-	bool CGifContrl::LoadGif( const TCHAR* szName ) 
+	bool CGifContrl::LoadGif(const TCHAR* szName, RECT& rc)
 	{
 		if( m_image != NULL )
 		{
@@ -122,7 +122,7 @@
 		m_image->GetFrameDimensionsList(pDimensionIDs, count);
 		WCHAR strGuid[39];
 		::StringFromGUID2(pDimensionIDs[0], strGuid, 39);
-		m_frameCount= m_image->GetFrameCount(&pDimensionIDs[0]);
+		m_unFrameAmount= m_image->GetFrameCount(&pDimensionIDs[0]);
 		delete []pDimensionIDs;   
 
 		int size = m_image->GetPropertyItemSize(PropertyTagFrameDelay);//获得帧延迟项
@@ -135,10 +135,12 @@
 		m_pItem = (PropertyItem*)malloc(size);
 		m_image->GetPropertyItem(PropertyTagFrameDelay,size,m_pItem);
 		SetRect( &m_rc , 0 , 0 ,  m_image->GetWidth(), m_image->GetHeight()) ;
+		SetRect(&rc, rc.left, rc.top, rc.left + m_image->GetWidth(), rc.top + m_image->GetHeight());
+		
 		return true;
 	}
 
-	void CGifContrl::DreawGif(const HDC* pHdc )
+	void CGifContrl::DrawGif(const HDC* pHdc )
 	{
 		if( m_image == NULL )
 			return ;
@@ -166,7 +168,7 @@
 			{
 				if( s_Gif[i] != NULL  && s_Gif[i]->IsHWND(hWnd ) && s_Gif[i]->InRect(ps.rcPaint )  )
 				{
-					s_Gif[i]->DreawGif(&hdc) ;
+					s_Gif[i]->DrawGif(&hdc) ;
 					break;
 				}
 			}
