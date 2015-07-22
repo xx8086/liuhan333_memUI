@@ -84,15 +84,19 @@ BOOL CKKControlDlg::OnInitDialog()
 	memset( GifPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
 	_stprintf(GifPath, _T("%s\\..\\skin\\1.gif"), DirectoryPath ) ;
 
-	SetRect( &rc , 200 , 250 , 200+35 , 250+38 ) ;
+
+	POINT ptBegin;
+	ptBegin.x = 200;
+	ptBegin.y = 250;
 	CGifContrl::AddGifContrl( &m_gif[0] ) ;
-	m_gif[0].CreateControl( GetSafeHwnd(), AfxGetInstanceHandle(), rc, GifPath, true ); 
+	m_gif[0].CreateGifControl(GetSafeHwnd(), AfxGetInstanceHandle(), ptBegin, GifPath, true);
 
 	memset( GifPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
 	_stprintf(GifPath, _T("%s\\..\\skin\\2.gif"), DirectoryPath ) ;
-	SetRect( &rc, 250, 250, 250+250, 250+179 ) ;
+	ptBegin.x = 250;
+	ptBegin.y = 250;
 	CGifContrl::AddGifContrl( &m_gif[1] ) ;
-	m_gif[1].CreateControl( GetSafeHwnd(),  AfxGetInstanceHandle(), rc, GifPath ); 
+	m_gif[1].CreateGifControl(GetSafeHwnd(), AfxGetInstanceHandle(), ptBegin, GifPath);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -214,7 +218,7 @@ void CKKControlDlg::OnLButtonUp(UINT nFlags, CPoint point)
 
 void CKKControlDlg::EditOperator( MSG* pMsg  )
 {
-	CKKUIEdit* pEdit = NULL  ;
+	CMMUIEdit* pEdit = NULL  ;
 	if( m_edit[0].GetActive())
 	{
 		pEdit = &m_edit[0] ;

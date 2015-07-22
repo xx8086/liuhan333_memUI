@@ -1,12 +1,12 @@
 #pragma once
 
-#include "KKUIBase.h"
+#include "memUIBase.h"
 
-class CKKUIEdit  : public CKKUIBase
+class CMMUIEdit  : public CMMUIBase
 {
 public:
-	CKKUIEdit(void);
-	~CKKUIEdit(void);
+	CMMUIEdit(void);
+	~CMMUIEdit(void);
 
 private:
 	POINT			m_TextOutPoint ;
@@ -19,10 +19,10 @@ private:
 	int				m_iMoveMin ;
 	int				m_iMoveMax ;
 
-	BOOL			m_bActive ;
-	BOOL			m_bLBttonDown ;
-	BOOL			m_bMove ;
-	BOOL			m_bCtrl ;
+	bool			m_bActive;
+	bool			m_bLBttonDown;
+	bool			m_bMove;
+	bool			m_bCtrl;
 
 	HGLOBAL			m_hGlobal ;
     TCHAR*			m_pGlobal ;
@@ -37,10 +37,10 @@ private:
 
 	EDIT_TYPE		m_isPassword ;
 public:
-	BOOL GetCtrl(){ return m_bCtrl; };
-	BOOL GetActive(){ return m_bActive ;} ;//用于决定光标显示的。
-	void SetActive( BOOL bc ){ m_bActive = bc ; };
-	void SetCtrl( BOOL bc ){ m_bCtrl = bc ;}
+	bool GetCtrl(){ return m_bCtrl; };
+	bool GetActive(){ return m_bActive; };//用于决定光标显示的。
+	void SetActive(bool bc){ m_bActive = bc; };
+	void SetCtrl(bool bc){ m_bCtrl = bc; }
 	
 private:
 	void CopyOrShearString( bool bShear = false ) ;
@@ -60,7 +60,7 @@ public:
 	void KeyDown( const TCHAR code ) ;
 	void DrawTextEdit( const HDC* phdc , BOOL bshowgb = TRUE  , COLORREF* clf = NULL ) ;
 
-	BOOL OnLButtonDown(  const HDC* phdc , const POINT pt )	;
+	bool OnLButtonDown(const HDC* phdc, const POINT pt);
 	void OnLbuttonUp()	;
 	void OnMouseMove( const HDC* phdc , const POINT pt ) ;
 	void DrawDefaultText( const HDC* phdc , TCHAR* tc ) ;

@@ -45,26 +45,29 @@
     <ClInclude Include="Resource.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Common\KKUIBase.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\KKUIButton.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\KKUIEdit.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\KKUIImage.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\KKUIFrame.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Common\BaseConfig.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="loadgif\BaseGif.h">
       <Filter>Gif</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\memUIFrame.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\memUIEdit.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\memUIButton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\memUIBase.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\memUIImage.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\memUIPage.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,23 +80,26 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Common\KKUIBase.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\KKUIButton.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\KKUIEdit.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\KKUIImage.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\KKUIFrame.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="loadgif\BaseGif.cpp">
       <Filter>Gif</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\memUIFrame.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\memUIEdit.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\memUIButton.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\memUIBase.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\memUIImage.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\memUIPage.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

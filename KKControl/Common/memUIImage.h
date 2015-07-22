@@ -1,12 +1,12 @@
 #pragma once
 
-#include "KKUIBase.h"
+#include "memUIBase.h"
 
-class CKKUIImage  //: public CKKUIBase
+class CUIImage
 {
 public:
-	CKKUIImage( void );
-	~CKKUIImage( void ) ;
+	CUIImage( void );
+	~CUIImage( void ) ;
 public:
 	void InitImage(  ItemStatusImage isi ) ;
 	BOOL DrawImage( const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc ) ;

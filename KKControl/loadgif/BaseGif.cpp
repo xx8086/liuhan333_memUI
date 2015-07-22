@@ -22,9 +22,9 @@
 		s_Gif[s_iGifCount]->SetIndex(s_iGifCount);
 		s_iGifCount++ ;
 	}
-	void CGifContrl::CreateControl(HWND fhwnd , HINSTANCE hInstance , RECT& rc , const TCHAR*  szName , bool bsrase )
+	 void CGifContrl::CreateGifControl(HWND fhwnd, HINSTANCE hInstance, const POINT ptBeginPostion, const TCHAR*  szName, bool bsrase)
 	{
-		if( false == LoadGif( szName, rc ))
+		if( false == LoadGif( szName))
 			return ;
 
 		WNDCLASSEX wcex;
@@ -44,21 +44,19 @@
 		bool r = RegisterClassEx(&wcex);
 
 		m_hwnd = CreateWindow(L"static",NULL,WS_VISIBLE |WS_CHILD ,
-			rc.left,rc.top ,
-			m_rc.right , m_rc.bottom ,
-			fhwnd ,NULL ,hInstance ,NULL );
+			ptBeginPostion.x, ptBeginPostion.y,
+			m_rc.right, m_rc.bottom ,
+			fhwnd, NULL, hInstance, NULL);
 		
 		if( !m_hwnd )
 			return ;
 
-
+		m_ptBeginPostion = ptBeginPostion;
 		m_bErase = bsrase;
 		SetTimer(m_hwnd , TIMER_SEC ,0 , NULL );
 
 		ShowWindow(m_hwnd , SW_SHOW);
-		UpdateWindow(m_hwnd) ;
-
-
+		UpdateWindow(m_hwnd);
 	}
 
 
@@ -108,7 +106,7 @@
 		}
 	}
 
-	bool CGifContrl::LoadGif(const TCHAR* szName, RECT& rc)
+	bool CGifContrl::LoadGif(const TCHAR* szName)
 	{
 		if( m_image != NULL )
 		{
@@ -135,7 +133,6 @@
 		m_pItem = (PropertyItem*)malloc(size);
 		m_image->GetPropertyItem(PropertyTagFrameDelay,size,m_pItem);
 		SetRect( &m_rc , 0 , 0 ,  m_image->GetWidth(), m_image->GetHeight()) ;
-		SetRect(&rc, rc.left, rc.top, rc.left + m_image->GetWidth(), rc.top + m_image->GetHeight());
 		
 		return true;
 	}

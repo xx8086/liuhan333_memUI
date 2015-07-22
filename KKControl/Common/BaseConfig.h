@@ -25,6 +25,8 @@
 #define ID_KUKE_MENU_X                  32776
 #define ID_KUKE_MENU_V                  32777
 
+#define	JUDGENULL(p,rt)		if(NULL == p){return rt;}
+#define	JUDGETRUE(p,rt)		if(TRUE == p){return rt;}
 
 typedef enum EditType
 {
@@ -92,7 +94,7 @@ struct TCBuffer
 struct ItemStatusImage
 {
 	int  iItemStatusAmount ;
-	TCHAR path[3][MAX_PATH] ;
+	TCHAR path[STATUS_AMOUNT][MAX_PATH];
 
 	ItemStatusImage():iItemStatusAmount(0)
 	{

@@ -109,11 +109,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\BaseConfig.h" />
-    <ClInclude Include="Common\KKUIBase.h" />
-    <ClInclude Include="Common\KKUIButton.h" />
-    <ClInclude Include="Common\KKUIEdit.h" />
-    <ClInclude Include="Common\KKUIFrame.h" />
-    <ClInclude Include="Common\KKUIImage.h" />
+    <ClInclude Include="Common\memUIBase.h" />
+    <ClInclude Include="Common\memUIButton.h" />
+    <ClInclude Include="Common\memUIEdit.h" />
+    <ClInclude Include="Common\memUIFrame.h" />
+    <ClInclude Include="Common\memUIImage.h" />
+    <ClInclude Include="Common\memUIPage.h" />
     <ClInclude Include="KKControl.h" />
     <ClInclude Include="KKControlDlg.h" />
     <ClInclude Include="loadgif\BaseGif.h" />
@@ -122,11 +123,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Common\KKUIBase.cpp" />
-    <ClCompile Include="Common\KKUIButton.cpp" />
-    <ClCompile Include="Common\KKUIEdit.cpp" />
-    <ClCompile Include="Common\KKUIFrame.cpp" />
-    <ClCompile Include="Common\KKUIImage.cpp" />
+    <ClCompile Include="Common\memUIBase.cpp" />
+    <ClCompile Include="Common\memUIButton.cpp" />
+    <ClCompile Include="Common\memUIEdit.cpp" />
+    <ClCompile Include="Common\memUIFrame.cpp" />
+    <ClCompile Include="Common\memUIImage.cpp" />
+    <ClCompile Include="Common\memUIPage.cpp" />
     <ClCompile Include="KKControl.cpp" />
     <ClCompile Include="KKControlDlg.cpp" />
     <ClCompile Include="loadgif\BaseGif.cpp" />

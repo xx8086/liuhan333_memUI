@@ -7,15 +7,15 @@ class CGifContrl
 {
 public:
 	CGifContrl();
-	~CGifContrl() ;
+	~CGifContrl();
 public:
 	static LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 	static void AddGifContrl( CGifContrl* addGif );
 public:
 	void DrawGif(const HDC* pHdc ) ;
-	void CreateControl(HWND fhwnd , HINSTANCE hInstance, RECT& rc , const TCHAR*  szName , bool bsrase = false );
+	void CreateGifControl(HWND fhwnd , HINSTANCE hInstance, const POINT ptBeginPostion, const TCHAR*  szName , bool bsrase = false );
 	void AddCount();
-	bool LoadGif(const TCHAR* szName, RECT& rc);
+	bool LoadGif(const TCHAR* szName);
 	bool InRect(RECT rc );
 	bool IsHWND(HWND hwnd){ return (hwnd == m_hwnd );}
 	void SetIndex(int index ) { m_index = index ;} 
@@ -41,6 +41,7 @@ private:
 	HWND			m_hwnd ;
 	int				m_index  ;
 	bool			m_bErase ;
+	POINT			m_ptBeginPostion;
 };
 
 

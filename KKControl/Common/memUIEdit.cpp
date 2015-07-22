@@ -1,10 +1,10 @@
 #include "StdAfx.h"
-#include "KKUIEdit.h"
+#include "memUIEdit.h"
 
 
 static HCURSOR	s_hCursor = NULL   ;
 
-CKKUIEdit::CKKUIEdit(void):m_iTextOutX(0),m_iTextOutY(0),m_iMaxWide(0),
+CMMUIEdit::CMMUIEdit(void):m_iTextOutX(0),m_iTextOutY(0),m_iMaxWide(0),
 	m_CaretPosition(0),m_iLButtonDown(0),m_iMoveMin(0),m_iMoveMax(0),
 	m_bLBttonDown(FALSE),m_bMove(FALSE),m_bActive(TRUE),m_bCtrl(FALSE),
 	m_hGlobal(NULL),m_pGlobal(NULL),m_memDC(NULL),m_memBitmap(NULL),
@@ -25,7 +25,7 @@ CKKUIEdit::CKKUIEdit(void):m_iTextOutX(0),m_iTextOutY(0),m_iMaxWide(0),
 	m_Text[TEXTBOX_MAXLENGTH] =  _T('\0');
 }
 
-CKKUIEdit::~CKKUIEdit(void)
+CMMUIEdit::~CMMUIEdit(void)
 {
 	if( m_memDC != NULL )
 	{
@@ -40,7 +40,7 @@ CKKUIEdit::~CKKUIEdit(void)
 	HideCaret() ;
 }
 
-void CKKUIEdit::InitContrlEdit( HWND hwnd , RECT rc  , int textoutX , int textoutY , int cursorX , int cursorY , int maxwide , TCHAR* text ,EDIT_TYPE et  )
+void CMMUIEdit::InitContrlEdit( HWND hwnd , RECT rc  , int textoutX , int textoutY , int cursorX , int cursorY , int maxwide , TCHAR* text ,EDIT_TYPE et  )
 {
 	m_hwnd = hwnd ;
 	m_rc = rc ;
@@ -56,7 +56,7 @@ void CKKUIEdit::InitContrlEdit( HWND hwnd , RECT rc  , int textoutX , int textou
 		memcpy(m_String ,text, _tcslen(text) * sizeof(TCHAR));
 }
 
-void CKKUIEdit::SetCaretNewPos( /*const  HDC* phdc*/ )
+void CMMUIEdit::SetCaretNewPos( /*const  HDC* phdc*/ )
 {
 	::HideCaret( m_hwnd ) ;
 	if( m_memDC == NULL )
@@ -79,7 +79,7 @@ void CKKUIEdit::SetCaretNewPos( /*const  HDC* phdc*/ )
 }
 
 
-void CKKUIEdit::CopyOrShearString( bool bShear ) 
+void CMMUIEdit::CopyOrShearString( bool bShear ) 
 {
 	if( abs( m_iMoveMax - m_iMoveMin ) >= 1  &&  EDIT_PASSWORD != m_isPassword )
 	{
@@ -104,7 +104,7 @@ void CKKUIEdit::CopyOrShearString( bool bShear )
 	}
 }
 
-int	 CKKUIEdit::GetStrPos( const HDC* phdc , int cx  )
+int	 CMMUIEdit::GetStrPos( const HDC* phdc , int cx  )
 {
 	SIZE size ;
 	size.cx = 0 ;
@@ -127,7 +127,7 @@ int	 CKKUIEdit::GetStrPos( const HDC* phdc , int cx  )
 	return strPos ;
 }
 
-int  CKKUIEdit::GetStrLen(  TCHAR* str , int ilen  )
+int  CMMUIEdit::GetStrLen(  TCHAR* str , int ilen  )
 {
 	CSize cs ;
 	int x  = ilen ;
@@ -142,7 +142,7 @@ int  CKKUIEdit::GetStrLen(  TCHAR* str , int ilen  )
 	return x ;
 }
 
-void CKKUIEdit::SetTextString(TCHAR* str )
+void CMMUIEdit::SetTextString(TCHAR* str )
 {
 	if( str == NULL )
 		return ;
@@ -150,19 +150,19 @@ void CKKUIEdit::SetTextString(TCHAR* str )
 	memcpy(m_String ,str, _tcslen(str) * sizeof(TCHAR));
 }
 
-CSize CKKUIEdit::GetStrWide( TCHAR* str , int ilen )
+CSize CMMUIEdit::GetStrWide( TCHAR* str , int ilen )
 {
 	CSize cs ;
 	GetTextExtentPoint32( m_memDC , str  , ilen , &cs );
 	return cs ;
 }
 
-void CKKUIEdit::CopyText( )
+void CMMUIEdit::CopyText( )
 {
 	CopyOrShearString() ;
 }
 
-void CKKUIEdit::PastText( ) 
+void CMMUIEdit::PastText( ) 
 {
 	OpenClipboard ( m_hwnd ) ;
 
@@ -199,14 +199,14 @@ void CKKUIEdit::PastText( )
 }
 
 
-void CKKUIEdit::ShearText() 
+void CMMUIEdit::ShearText() 
 {
 	if( m_iMoveMin == m_iMoveMax )
 		return ;
 	CopyOrShearString( true ) ;
 }
 
-void CKKUIEdit::GetTchar( /*const HDC* phdc ,*/ const TCHAR code ) 
+void CMMUIEdit::GetTchar( /*const HDC* phdc ,*/ const TCHAR code ) 
 {
 	CSize cs = GetStrWide(  m_String ,  GetStringLen() ) ;
 	if(  code <= _T(' ') ||  cs.cx > m_iMaxWide )
@@ -234,7 +234,7 @@ void CKKUIEdit::GetTchar( /*const HDC* phdc ,*/ const TCHAR code )
 	OnFlushContrl( ) ;
 }
 
-void CKKUIEdit::KeyDown( const TCHAR code /* , const HDC* phdc */)
+void CMMUIEdit::KeyDown( const TCHAR code /* , const HDC* phdc */)
 {
 	switch (code)
 	{
@@ -302,7 +302,7 @@ void CKKUIEdit::KeyDown( const TCHAR code /* , const HDC* phdc */)
 	}
 }
 
-void CKKUIEdit::DrawTextEdit( const HDC* phdc   , BOOL bshowgb  , COLORREF* clf ) 
+void CMMUIEdit::DrawTextEdit( const HDC* phdc   , BOOL bshowgb  , COLORREF* clf ) 
 {
 	//FlushBackGround( phdc  ) ; 
 	RECT rc ;
@@ -386,40 +386,40 @@ void CKKUIEdit::DrawTextEdit( const HDC* phdc   , BOOL bshowgb  , COLORREF* clf 
 }
 
 
-BOOL CKKUIEdit::OnLButtonDown( const HDC* phdc , const POINT pt )
+bool CMMUIEdit::OnLButtonDown(const HDC* phdc, const POINT pt)
 {
 	if( !InPoint( m_rc , pt ) )
 	{
 		if(m_bActive)
 			HideCaret() ;
-		m_bActive = FALSE ;
-		DrawTextEdit( phdc , FALSE ) ;
-		return FALSE ;
+		m_bActive = false;
+		DrawTextEdit(phdc, false);
+		return false ;
 	}
 
 	int x  = pt.x - m_TextOutPoint.x  ;
 	m_CaretPosition = GetStrPos( &m_memDC , x ) ;
 	m_iLButtonDown = m_CaretPosition ;
-	m_bMove = FALSE ;
-	m_bLBttonDown =TRUE;
+	m_bMove = false;
+	m_bLBttonDown = true;
 	m_iMoveMin = m_iMoveMax = m_iLButtonDown  ;
 	
 	SetFocus();
-	m_bActive = TRUE ;
+	m_bActive = false;
 	SetCaretNewPos( ) ;
 	DrawTextEdit( phdc ) ;
 	//OnFlushContrl() ;
 	
 
-	return TRUE ;
+	return false;
 }
-void CKKUIEdit::OnLbuttonUp()
+void CMMUIEdit::OnLbuttonUp()
 {
-	m_bLBttonDown = FALSE ;
-	m_bMove = FALSE ;
+	m_bLBttonDown = false ;
+	m_bMove = false ;
 }
 
-void CKKUIEdit::OnMouseMove( const HDC* phdc , const POINT pt )
+void CMMUIEdit::OnMouseMove( const HDC* phdc , const POINT pt )
 {
 	if( !m_bLBttonDown )
 		return ;
@@ -439,14 +439,14 @@ void CKKUIEdit::OnMouseMove( const HDC* phdc , const POINT pt )
 	m_iMoveMax = m_iLButtonDown > strPos ? m_iLButtonDown : strPos ;
 	m_iMoveMin = m_iLButtonDown > strPos ? strPos : m_iLButtonDown ;
 
-	m_bMove = TRUE ;
+	m_bMove = true ;
 
 	m_CaretPosition = strPos ;
 	//SetCaretNewPos( ) ;
 	OnFlushContrl() ;
 }
 
-void CKKUIEdit::DrawDefaultText( const HDC* phdc , TCHAR* tc )
+void CMMUIEdit::DrawDefaultText( const HDC* phdc , TCHAR* tc )
 {
 	if( 0 != GetStringLen() )
 		return ;
@@ -490,7 +490,7 @@ void CKKUIEdit::DrawDefaultText( const HDC* phdc , TCHAR* tc )
 }
 
 
-void CKKUIEdit::DrawTextEdging( const HDC* phdc , int shitfing  ) 
+void CMMUIEdit::DrawTextEdging( const HDC* phdc , int shitfing  ) 
 {
 	return ;
 
@@ -508,7 +508,7 @@ void CKKUIEdit::DrawTextEdging( const HDC* phdc , int shitfing  )
 	};
 }
 
-void CKKUIEdit::SetFocus( )
+void CMMUIEdit::SetFocus( )
 {
 	if( NULL == s_hCursor )
 	{
@@ -520,7 +520,7 @@ void CKKUIEdit::SetFocus( )
 	::ShowCaret( m_hwnd );//œ‘ æπ‚±Í;
 }
 
-void CKKUIEdit::HideCaret()
+void CMMUIEdit::HideCaret()
 {
 	if( NULL != s_hCursor )
 	{

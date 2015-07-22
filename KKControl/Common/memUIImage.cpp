@@ -1,19 +1,19 @@
 #include "StdAfx.h"
-#include "KKUIImage.h"
+#include "memUIImage.h"
 ////#include <comdef.h>
 ////#include <Windows.h>
 //#include <gdiplus.h>       
 //using namespace Gdiplus;      
 //#pragma comment(lib,"gdiplus.lib")
 
-CKKUIImage::CKKUIImage(void):iImageAmount(0)
+CUIImage::CUIImage(void):iImageAmount(0)
 {
 	for( int i = 0 ; i < 3 ; i++ )
 		m_cImage[i] = NULL ;
 }
 
 
-CKKUIImage::~CKKUIImage(void)
+CUIImage::~CUIImage(void)
 {
 	for( int  i = 0 ; i < 3 ; i++ )
 	{
@@ -25,7 +25,7 @@ CKKUIImage::~CKKUIImage(void)
 	}
 }
 
-void CKKUIImage::InitImage(  ItemStatusImage isi ) 
+void CUIImage::InitImage(  ItemStatusImage isi ) 
 {
 	iImageAmount = isi.iItemStatusAmount ;
 	for( int i = 0 ; i < iImageAmount ; i++  )
@@ -42,7 +42,7 @@ void CKKUIImage::InitImage(  ItemStatusImage isi )
 	}	
 }
 
-BOOL CKKUIImage::DrawImage(  const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc  )
+BOOL CUIImage::DrawImage(  const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc  )
 {
 	//Graphics graphics( *phdc ) ;
 	//Status ss ;
@@ -58,7 +58,7 @@ BOOL CKKUIImage::DrawImage(  const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc  )
 	return bk ;
 }
 
-HRESULT CKKUIImage::InitImageName( TCHAR * imgName , ITEM_STATUS iStatus ) 
+HRESULT CUIImage::InitImageName( TCHAR * imgName , ITEM_STATUS iStatus ) 
 {
 	HRESULT hr =  m_cImage[ iStatus ]->Load(imgName) ;
 	if ( SUCCEEDED( hr ) && m_cImage[ iStatus ]->GetBPP() == 32 ) //确认该图像包含Alpha通道

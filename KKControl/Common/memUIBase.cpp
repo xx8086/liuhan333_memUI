@@ -1,20 +1,20 @@
 #include "StdAfx.h"
-#include "KKUIBase.h"
+#include "memUIBase.h"
 
 
-CKKUIBase::CKKUIBase(void)
+CMMUIBase::CMMUIBase(void)
 {
 
 }
 
-CKKUIBase::~CKKUIBase(void)
+CMMUIBase::~CMMUIBase(void)
 {
 
 }
 
 
 //////////////////////////////////////////////////////////////
-void CKKUIBase::Init( HWND hwnd , RECT rc , int iAmount ) 
+void CMMUIBase::Init( HWND hwnd , RECT rc , int iAmount ) 
 {
 	m_statusAmount = iAmount ;
 	m_rc =  rc ;
@@ -23,14 +23,14 @@ void CKKUIBase::Init( HWND hwnd , RECT rc , int iAmount )
 }
 
 
-HRESULT CKKUIBase::InitImageName( TCHAR * imgName , ITEM_STATUS iStatus ) 
+HRESULT CMMUIBase::InitImageName( TCHAR * imgName , ITEM_STATUS iStatus ) 
 {
 	return 0 ;
 }
 
 
 
-BOOL CKKUIBase::InRECT( RECT rc_0 , RECT rc_1 )
+bool CMMUIBase::InRECT(RECT rc_0, RECT rc_1)
 {
 	if( rc_0.bottom >= rc_1.bottom &&
 		rc_0.left <= rc_1.left &&
@@ -38,10 +38,10 @@ BOOL CKKUIBase::InRECT( RECT rc_0 , RECT rc_1 )
 		rc_0.top <= rc_1.top  )
 		return TRUE ;
 
-	return FALSE ;
+	return false ;
 } 
 
-BOOL CKKUIBase::ContainsRect( RECT rc ) 
+bool CMMUIBase::ContainsRect(RECT rc)
 {
 	POINT pt0 ;
 	POINT pt1 ;
@@ -61,93 +61,93 @@ BOOL CKKUIBase::ContainsRect( RECT rc )
 		InPoint( rc , pt1) ||
 		InPoint( rc , pt2) ||
 		InPoint( rc , pt3) ) 
-		return TRUE ;
+		return true ;
 
-	return FALSE ;
+	return false ;
 }
 
-BOOL CKKUIBase::InPoint( RECT rc_0 , POINT pt )
+bool CMMUIBase::InPoint(RECT rc_0, POINT pt)
 {
 	if( rc_0.bottom >= pt.y &&
 		rc_0.left <= pt.x &&
 		rc_0.right >= pt.x &&
 		rc_0.top <= pt.y  )
-		return TRUE ;
+		return true ;
 
-	return FALSE ;
+	return false ;
 }
 
-void	CKKUIBase::OnFlushContrl(   BOOL brf )
+void	CMMUIBase::OnFlushContrl(   bool brf )
 {
 	::InvalidateRect( m_hwnd ,&m_rc , brf ) ;
 	::UpdateWindow( m_hwnd ) ;
 }
 
-BOOL   CKKUIBase::OnMouseLeave( POINT pt  ) 
+bool   CMMUIBase::OnMouseLeave(POINT pt)
 {
-	BOOL rt = FALSE ;
+	bool rt = false ;
 	if( m_currentStatus != STATUS_NORMAL && !InPoint( m_rc , pt )   )
 	{
 		m_currentStatus = STATUS_NORMAL ;
 		OnFlushContrl() ;
-		rt  = TRUE ;
+		rt  = true ;
 	}
 
 	return rt ;
 }
 
-BOOL    CKKUIBase::OnLButtonDown( POINT pt ) 
+bool    CMMUIBase::OnLButtonDown(POINT pt)
 {
-	BOOL rt = FALSE ;
+	bool rt = false ;
 	if(  m_statusAmount > (int)STATUS_CLICK && InPoint( m_rc , pt )  )
 	{
 		m_currentStatus = STATUS_CLICK ;
 		OnFlushContrl() ;
-		rt  = TRUE ;
+		rt  = true ;
 	}
 
 	return rt ;
 };
 
-BOOL    CKKUIBase::OnMouseHover( POINT pt ) 
+bool    CMMUIBase::OnMouseHover(POINT pt)
 {
-	BOOL rt = FALSE ;
+	bool rt = false ;
 	if( m_statusAmount > (int)STATUS_OVER && InPoint( m_rc , pt )  )
 	{
 		m_currentStatus = STATUS_OVER ;
 		OnFlushContrl() ;
-		rt  = TRUE ;
+		rt  = true ;
 	}
 	return rt ;
 };
 
-BOOL    CKKUIBase::OnLButtonUp( POINT pt ) 
+bool    CMMUIBase::OnLButtonUp(POINT pt)
 {
-	//BOOL rt = FALSE ;
+	//bool rt = false ;
 	//if( InPoint( m_rc , pt )  )
-	//	rt = TRUE ;
+	//	rt = true ;
 
-	//return FALSE ;
+	//return false ;
 	return OnMouseHover(pt);
 };
-BOOL    CKKUIBase::OnMouseMove( POINT pt )
+bool    CMMUIBase::OnMouseMove(POINT pt)
 {
-	BOOL rt = FALSE ;
+	bool rt = false;
 	if( InPoint( m_rc , pt )  )
-		rt = TRUE ;
-	return FALSE ;
+		rt = true ;
+	return rt ;
 };
 
- BOOL	CKKUIBase::OnPaint( const RECT  rc  ) 
+bool	CMMUIBase::OnPaint(const RECT  rc)
  {
-	 BOOL rt = FALSE ;
+	 bool rt = false ;
 	 if( ContainsRect( rc ) )
-		rt = TRUE ;
+		rt = true ;
 	 
 	 return rt ;
  }
 
- DWORD CKKUIBase::GetModulePath(DWORD nBufferLength, LPTSTR lpBuffer)
+ DWORD CMMUIBase::GetModulePath(DWORD nBufferLength, LPTSTR lpBuffer)
 {	
 	DWORD dwReturn = 0;	
 	if (nBufferLength <= 0 || lpBuffer == NULL)	

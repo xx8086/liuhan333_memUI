@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "Common\KKUIButton.h"
-#include "Common\KKUIEdit.h"
+#include "Common\memUIButton.h"
+#include "Common\memUIEdit.h"
 #include "loadgif\BaseGif.h"
 
 // CKKControlDlg ¶Ô»°¿ò
@@ -33,8 +33,8 @@ protected:
 	DECLARE_MESSAGE_MAP() ;
 
 private:
-	CKKUIButton m_btn[2] ;
-	CKKUIEdit	m_edit[2] ;
+	CMMUIButton m_btn[2] ;
+	CMMUIEdit	m_edit[2] ;
 	CGifContrl	m_gif[2];
 	
 public:

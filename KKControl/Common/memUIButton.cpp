@@ -1,18 +1,18 @@
 #include "StdAfx.h"
-#include "KKUIButton.h"
+#include "memUIButton.h"
 
 
-CKKUIButton::CKKUIButton(void)
+CMMUIButton::CMMUIButton(void)
 {
 
 }
 
-CKKUIButton::~CKKUIButton(void)
+CMMUIButton::~CMMUIButton(void)
 {
 
 }
 
-void	CKKUIButton::InitBtn( HWND hwnd , RECT rc , ItemStatusImage isi )  
+void	CMMUIButton::InitBtn( HWND hwnd , RECT rc , ItemStatusImage isi )  
 {
 	Init( hwnd , rc , isi.iItemStatusAmount ) ;
 
@@ -23,15 +23,15 @@ void	CKKUIButton::InitBtn( HWND hwnd , RECT rc , ItemStatusImage isi )
 	ItemStatusImage _isi ;
 	_isi.iItemStatusAmount = isi.iItemStatusAmount ;
 	for( int i = 0 ;  i < isi.iItemStatusAmount ; i++ ) 
-		_stprintf( _isi.path[i], _T("%s%s"), DirectoryPath , isi.path[i]) ;
+		_stprintf( _isi.path[i], _T("%s%s"), DirectoryPath, isi.path[i]) ;
 
 	m_BTNImage.InitImage( _isi ) ;
 }
 
-BOOL	CKKUIButton::OnPaint( const HDC* phdc , RECT rc ) 
+bool	CMMUIButton::OnPaint( const HDC* phdc , RECT rc ) 
 {
-	BOOL rt = FALSE ;
-	rt = CKKUIBase::OnPaint( rc ) ;
+	bool rt = false ;
+	rt = CMMUIBase::OnPaint( rc ) ;
 	if(rt)
 	{
 		m_BTNImage.DrawImage( phdc , GetCurrentStatus() , GetRect() ) ;
