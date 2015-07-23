@@ -28,8 +28,7 @@ struct ParamPage
 	
 	int					iPageAmount;
 	int					iCurrentPage;
-	int					iMaxShowPage;
-	bool				bAutoWriteDigit;
+	int					iAllShowPage;
 	HWND				hWnd;
 	POINT				ptBeginPosition;
 };
@@ -40,25 +39,30 @@ public:
 	CUIPage();
 	virtual ~CUIPage();
 public:
-	bool InitPage(const ParamPage* pInitpage, int& iRseAmount);
-	
+	bool	InitPage(const ParamPage* pInitpage, int& iRseAmount);
+	int		ClickNextButton();
+	int		ClickPrevButton();
+	bool	ClickPage(int index);
 private:
-	HWND				m_hwnd;
+	bool	OmitChange(int index);
+	bool	InitCurrentPage();//m_iCurrentIndex = 1
+private:
+	HWND				m_hWnd;
 	int					m_iPageAmount;//页数
-	int					m_iCurrentPage;//当前页
-	int					m_iMaxShowPage;//最大显示页数，超过该指定值就回显示省略号
-	bool				m_bAutoWriteDigit;
+	int					m_iCurrentIndex;//当按钮号
+	int					m_iAllShowPage;//页数加省略号一共需要显示的页签
+	int**				m_ppPageArray;//页情况
 	bool				m_bHaveExButton;
+	bool				m_bHaveOmit;
+	bool				m_bAllPaint;
 	RECT				m_rc;
+	POINT				m_pt;
 	CMMUIButton*		m_pPageButton;
 	CMMUIButton			m_PrevButton;
 	CMMUIButton			m_NextButton;
 	CMMUIButton			m_OmitButton;
 };
-//< 1 2 3 >
-//< 1 ... 4>//应为省略号左右两边必须有数字，m_iPageAmount<=4时只能全部页数显示，不能显示省略号
-//< 1 2 ... 5>//省略号至少代表大于等于2个页数，m_iMaxShowPage>=3 && m_iPageAmount>=5
-//< 1 2 ... 6>//(m_iMaxShowPage == 4 && m_iPageAmount == 6)	m_iPageAmount-m_iMaxShowPage<=2只显示最多一个省略号
-//< 1 2 ... 5 ... 7>//m_iMaxShowPage == 4 && m_iPageAmount == 7
-//< 1 2 ... 5 ... 8>//m_iMaxShowPage == 4 && m_iPageAmount == 8
-//< 1 2 ... 5 6 7>//m_iMaxShowPage == 5 && m_iPageAmount == 7
+//*m_ppPageArray[1]					永远为1
+//*m_ppPageArray[2]					为2或者...
+//*m_ppPageArray[m_iAllShowPage]	永远为m_iPageAmount
+//*m_ppPageArray[m_iAllShowPage-1]	为m_iPageAmount-1或者...

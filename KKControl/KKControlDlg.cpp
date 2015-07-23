@@ -52,9 +52,10 @@ BOOL CKKControlDlg::OnInitDialog()
 
 	ItemStatusImage isi  ;
 	isi.iItemStatusAmount = 3 ; 
-	_stprintf( isi.path[0] , _T("\\..\\skin\\play_normal.png") ) ;
-	_stprintf( isi.path[1] , _T("\\..\\skin\\play_hover.png") ) ;
-	_stprintf( isi.path[2] , _T("\\..\\skin\\play_click.png") ) ;
+
+	_stprintf_s(isi.path[0], MAX_PATH, _T("\\..\\skin\\play_normal.png"));
+	_stprintf_s(isi.path[1], MAX_PATH, _T("\\..\\skin\\play_hover.png"));
+	_stprintf_s(isi.path[2], MAX_PATH, _T("\\..\\skin\\play_click.png"));
 
 	RECT rc ;
 	SetRect( &rc , 50 , 50 , 50 + 203 , 50 + 40 ) ;
@@ -82,7 +83,7 @@ BOOL CKKControlDlg::OnInitDialog()
 	DWORD dr = m_btn[0].GetModulePath( MAX_PATH , DirectoryPath ) ;
 	TCHAR GifPath[MAX_PATH] ;
 	memset( GifPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
-	_stprintf(GifPath, _T("%s\\..\\skin\\1.gif"), DirectoryPath ) ;
+	_stprintf_s(GifPath, MAX_PATH, _T("%s\\..\\skin\\1.gif"), DirectoryPath);
 
 
 	POINT ptBegin;
@@ -92,7 +93,7 @@ BOOL CKKControlDlg::OnInitDialog()
 	m_gif[0].CreateGifControl(GetSafeHwnd(), AfxGetInstanceHandle(), ptBegin, GifPath, true);
 
 	memset( GifPath , 0 , MAX_PATH*sizeof(TCHAR) ) ;
-	_stprintf(GifPath, _T("%s\\..\\skin\\2.gif"), DirectoryPath ) ;
+	_stprintf_s(GifPath, MAX_PATH, _T("%s\\..\\skin\\2.gif"), DirectoryPath);
 	ptBegin.x = 250;
 	ptBegin.y = 250;
 	CGifContrl::AddGifContrl( &m_gif[1] ) ;
