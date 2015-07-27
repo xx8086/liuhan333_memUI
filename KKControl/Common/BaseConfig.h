@@ -26,7 +26,7 @@
 #define ID_KUKE_MENU_V                  32777
 
 #define JUDGENULL(p,rt)			if(NULL == p){return rt;} 
-#define	JUDGETRUE(p,rt)			if(TRUE == p){return rt;}
+#define	JUDGETRUE(p,rt)			if(true == p){return rt;}
 #define DELETEPOINT(P)			if(NULL != p){delete p; p = NULL;}
 typedef enum EditType
 {
@@ -73,7 +73,7 @@ typedef enum ContrlType
 
 
 #define WHITE_COLORE			RGB ( 255 , 255 , 255 )
-
+#define WHITE_BLACK				RGB ( 0 , 0 , 0 )
 struct TCBuffer
 {
 	TCHAR buffer[MAX_PATH];

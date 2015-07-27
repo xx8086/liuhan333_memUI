@@ -1,6 +1,7 @@
 #pragma once
 
 #include "memUIButton.h"
+#include "memUIBaseTextOut.h"
 
 #define MAX_PAGE_NUMBER		(20)
 typedef enum PageType
@@ -33,7 +34,7 @@ struct ParamPage
 	POINT				ptBeginPosition;
 };
 
-class CUIPage
+class CUIPage : public CMMUIBase, public CMMUIBaseTextOut
 {
 public:
 	CUIPage();
@@ -43,9 +44,12 @@ public:
 	int		ClickNextButton();
 	int		ClickPrevButton();
 	bool	ClickPage(int index);
+public:
+	bool	OnPaint(const HDC* phdc, RECT rc);
 private:
 	bool	OmitChange(int index);
 	bool	InitCurrentPage();//m_iCurrentIndex = 1
+	bool	DrawPage(const HDC* phdc, RECT rc, int index);
 private:
 	HWND				m_hWnd;
 	int					m_iPageAmount;//Ò³Êý

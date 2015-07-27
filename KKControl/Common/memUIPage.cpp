@@ -69,7 +69,7 @@ bool CUIPage::InitPage(const ParamPage* pInitpage, int& iRseAmount)
 
 int	CUIPage::ClickPrevButton()
 {
-	JUDGETRUE(m_iCurrentIndex == 1, 1)
+	JUDGETRUE((m_iCurrentIndex == 1), 1)
 	JUDGETRUE(m_iCurrentIndex < 1, 0)
 	JUDGETRUE(m_iCurrentIndex > m_iAllShowPage, 0)
 
@@ -81,20 +81,13 @@ int	CUIPage::ClickPrevButton()
 	}
 	//1 ... [x] x+1 y-1  y ... [max]
 	//当m_iCurrentIndex为x或者max时候会触发...改变,其他情况不会；
-	if (*m_ppPageArray[iPrevIndex] == 0)
-	{
-		JUDGETRUE(!OmitChange(iPrevIndex), 0);
-	}
-	else
-	{
-		JUDGETRUE(ClickPage(iPrevIndex), 0);
-	}
+	JUDGETRUE(ClickPage(iPrevIndex), 0);
 	return iPrevIndex;
 }
 
 int	CUIPage::ClickNextButton()
 {
-	JUDGETRUE(m_iCurrentIndex == m_iAllShowPage, m_iAllShowPage)
+	JUDGETRUE((m_iCurrentIndex == m_iAllShowPage), m_iAllShowPage)
 	JUDGETRUE(m_iCurrentIndex < 1, 0)
 	JUDGETRUE(m_iCurrentIndex > m_iAllShowPage, 0)
 
@@ -104,16 +97,7 @@ int	CUIPage::ClickNextButton()
 		JUDGETRUE(ClickPage(iNextIndex), 0);
 		return iNextIndex;
 	}
-	//1 ... [x] x+1 y-1  y ... [max]
-	//当m_iCurrentIndex为1或者y时候会触发...改变,其他情况不会；
-	if (*m_ppPageArray[iNextIndex] == 0)
-	{
-		JUDGETRUE(!OmitChange(iNextIndex),0);
-	}
-	else
-	{
-		JUDGETRUE(ClickPage(iNextIndex), 0);
-	}
+	JUDGETRUE(ClickPage(iNextIndex), 0);
 	return iNextIndex;
 }
 bool	CUIPage::OmitChange(int index)
@@ -135,13 +119,97 @@ bool	CUIPage::OmitChange(int index)
 	{
 		*m_ppPageArray[i] = iValue++;
 	}
-	m_iCurrentIndex = index;
+
 	m_bAllPaint = true;
+
+	return true;
 }
+bool	CUIPage::InitCurrentPage()
+{
+	for (int i = 1; i < m_iAllShowPage - 1; i++)
+	{
+		*m_ppPageArray[i] = i;
+	}
+
+	if (m_bHaveOmit && m_iPageAmount >m_iAllShowPage)
+	{
+		*m_ppPageArray[m_iAllShowPage - 1] = 0;
+	}
+	else if (!m_bHaveOmit && m_iPageAmount == m_iAllShowPage)
+	{
+		*m_ppPageArray[m_iAllShowPage - 1] = m_iAllShowPage - 1;
+	}
+	else
+	{
+		JUDGETRUE(true, false);
+	}
+	*m_ppPageArray[m_iAllShowPage] = m_iPageAmount;
+	m_iCurrentIndex = 1;
+	return true;
+}
+
 bool	CUIPage::ClickPage(int index)
 {
 	JUDGETRUE(index < 1, false);
 	JUDGETRUE(index > m_iAllShowPage, false);
+	m_iCurrentIndex = index;
 
+	if (!m_bHaveOmit)
+		return true;
 
+	if (*m_ppPageArray[2] == 0 && (index == 1 || index == 3))
+	{
+		OmitChange(1);
+	}
+	else if (*m_ppPageArray[m_iAllShowPage - 1] == 0 && (index == m_iAllShowPage - 2 || index == m_iAllShowPage))
+	{
+		OmitChange(m_iAllShowPage);
+	}
+
+	return true;
+}
+
+bool	CUIPage::OnPaint(const HDC* phdc, RECT rc)
+{
+	bool rt = false;
+	rt = CMMUIBase::OnPaint(rc);
+	if (!rt)
+	{
+		return rt;
+		//m_BTNImage.DrawImage(phdc, GetCurrentStatus(), GetRect());
+	}
+
+	if (m_bAllPaint)
+	{
+		for (int i = 0; i < m_iAllShowPage; i++)
+		{
+			DrawPage(phdc, rc, i);
+		}
+	}
+	else
+	{
+		DrawPage(phdc, rc, m_iCurrentIndex);
+	}
+
+	return rt;
+}
+
+bool	CUIPage::DrawPage(const HDC* phdc, RECT rc, int index)
+{
+	JUDGETRUE(index<0,false)
+	JUDGETRUE(m_iAllShowPage >= 0, false)
+
+	m_pPageButton[index].OnPaint(phdc, rc);
+
+	TCHAR pText[56] = {0};
+	if (0 == m_ppPageArray[index])
+	_stprintf_s(pText, 56, _T("..."));
+	else
+	{
+		_stprintf_s(pText, 56, _T("%d"), m_ppPageArray[index]);
+	}
+	
+	CMMUIBaseTextOut::DrawText(phdc, rc, pText);
+
+	return true;
 }

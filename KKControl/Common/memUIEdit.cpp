@@ -146,7 +146,7 @@ void CMMUIEdit::SetTextString(TCHAR* str )
 {
 	if( str == NULL )
 		return ;
-	memset( m_String , 0, sizeof(m_String )* sizeof(TCHAR) );
+	memset(m_String , 0, sizeof(m_String )* sizeof(TCHAR));
 	memcpy(m_String ,str, _tcslen(str) * sizeof(TCHAR));
 }
 
@@ -470,9 +470,9 @@ void CMMUIEdit::DrawDefaultText( const HDC* phdc , TCHAR* tc )
 		m_hOldbitmap = (HBITMAP)SelectObject( m_memDC , m_memBitmap );
 
 	HBRUSH hBrush ;
-	hBrush = CreateSolidBrush( RGB(255,255,255) ); 
+	hBrush = CreateSolidBrush(WHITE_COLORE);
 	::FillRect( m_memDC , &_rc , hBrush ) ;
-	DeleteObject( hBrush ) ;
+	
 
 	//if( NULL == m_font_wrya )
 	//{
@@ -483,7 +483,7 @@ void CMMUIEdit::DrawDefaultText( const HDC* phdc , TCHAR* tc )
 	COLORREF oldTextColo = SetTextColor( m_memDC  , RGB(199,199,199) );
 	::TextOut( m_memDC, m_iTextOutX , m_iTextOutY , tc , _tcslen(tc) );
 	SetTextColor( m_memDC  , oldTextColo ) ;
-	
+	DeleteObject(hBrush);
 	
 	BitBlt ( *phdc , rc.left , rc.top , _rc.right - 2 , _rc.bottom  ,
 		m_memDC , 0 , 0 , SRCCOPY ) ;
@@ -505,7 +505,7 @@ void CMMUIEdit::DrawTextEdging( const HDC* phdc , int shitfing  )
 	if( !bde )
 	{
 		int err = GetLastError() ;
-	};
+	}
 }
 
 void CMMUIEdit::SetFocus( )

@@ -110,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="Common\BaseConfig.h" />
     <ClInclude Include="Common\memUIBase.h" />
+    <ClInclude Include="Common\memUIBaseTextOut.h" />
     <ClInclude Include="Common\memUIButton.h" />
     <ClInclude Include="Common\memUIEdit.h" />
     <ClInclude Include="Common\memUIFrame.h" />
@@ -124,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\memUIBase.cpp" />
+    <ClCompile Include="Common\memUIBaseTextOut.cpp" />
     <ClCompile Include="Common\memUIButton.cpp" />
     <ClCompile Include="Common\memUIEdit.cpp" />
     <ClCompile Include="Common\memUIFrame.cpp" />

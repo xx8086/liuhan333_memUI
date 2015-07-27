@@ -17,7 +17,5 @@ private:
 	CImage*		m_cImage[STATUS_AMOUNT] ;
 	int iImageAmount ;
 public:
-
-
 };
 
