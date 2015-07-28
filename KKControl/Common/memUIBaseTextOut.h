@@ -7,7 +7,7 @@ public:
 	CMMUIBaseTextOut();
 	~CMMUIBaseTextOut();
 public:
-	bool	DrawText(const HDC* phdc, RECT rc, TCHAR* pText );
+	bool	DrawTextOut(const HDC* phdc, RECT rc, TCHAR* pText );
 	bool	SetFontBK(COLORREF bfontBKColo, bool bBK);
 	bool	SetBKBlush(COLORREF bBKColo, bool bBK);
 	bool	SetFontColo(COLORREF fontColo);

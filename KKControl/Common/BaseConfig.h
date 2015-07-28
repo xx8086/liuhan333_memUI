@@ -28,6 +28,7 @@
 #define JUDGENULL(p,rt)			if(NULL == p){return rt;} 
 #define	JUDGETRUE(p,rt)			if(true == p){return rt;}
 #define DELETEPOINT(P)			if(NULL != p){delete p; p = NULL;}
+
 typedef enum EditType
 {
 	EDIT_NORMAL		= 0 ,

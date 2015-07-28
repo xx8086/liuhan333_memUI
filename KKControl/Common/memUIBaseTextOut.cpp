@@ -56,7 +56,7 @@ bool	CMMUIBaseTextOut::SetFontColo(COLORREF fontColo)
 	return true;
 }
 
-bool	CMMUIBaseTextOut::DrawText(const HDC* phdc, RECT rc, TCHAR* pText)
+bool	CMMUIBaseTextOut::DrawTextOut(const HDC* phdc, RECT rc, TCHAR* pText)
 {
 	RECT _rc;
 	_rc.left = _rc.top = 0;

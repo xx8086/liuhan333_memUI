@@ -99,6 +99,49 @@ BOOL CKKControlDlg::OnInitDialog()
 	CGifContrl::AddGifContrl( &m_gif[1] ) ;
 	m_gif[1].CreateGifControl(GetSafeHwnd(), AfxGetInstanceHandle(), ptBegin, GifPath);
 
+
+	isi.iItemStatusAmount = 3;
+	_stprintf_s(isi.path[0], MAX_PATH, _T("\\..\\skin\\page_normal.png"));
+	_stprintf_s(isi.path[1], MAX_PATH, _T("\\..\\skin\\page_hover.png"));
+	_stprintf_s(isi.path[2], MAX_PATH, _T("\\..\\skin\\page_click.png"));
+
+	POINT ptPage;
+	ptPage.x = 30;
+	ptPage.y = 420;
+	int iSpace = 8;
+	ParamPage parpage;
+	PageRes	pageOmit;
+	PageRes	pagePrev;
+	PageRes	pageNext;
+	PageRes pagePagep[10];
+	
+	//24*23
+	SetRect(&pagePrev.rc, ptPage.x, ptPage.y, ptPage.x + 24, ptPage.y + 23);
+	pagePrev.type = PATE_TYPE_PREV;
+	pagePrev.isi = isi;
+	int beginX = 0;
+	for (int i = 1; i <= 10; i++)
+	{
+		beginX = ptPage.x + i*(iSpace + 24);
+		SetRect(&pagePagep[i - 1].rc, beginX, ptPage.y, beginX + 24, ptPage.y + 23);
+		pagePagep[i - 1].isi = isi;
+		pagePagep[i - 1].type = PATE_TYPE_DIGIT;
+	}
+
+	beginX += iSpace + 24;
+	SetRect(&pageNext.rc, beginX, ptPage.y, beginX + 24, ptPage.y + 23);
+	pageNext.type = PATE_TYPE_NEXT;
+	pageNext.isi = isi;
+
+	SetRect(&rc, pagePrev.rc.left, pagePrev.rc.top, pageNext.rc.right, pageNext.rc.bottom);
+	parpage.rc = rc;
+	parpage.iPageAmount = 25;
+	parpage.iAllShowPage = 10;
+	parpage.hWnd = GetSafeHwnd();
+	parpage.pNext = &pageNext;
+	parpage.pPrev = &pagePrev;
+	parpage.ppRse = (PageRes*)(&pagePagep);
+	m_page.InitPage(&parpage,10);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -138,6 +181,11 @@ void CKKControlDlg::OnPaint()
 			m_edit[0].DrawTextEdit( &hdc ) ;
 		if( m_edit[1].GetActive() )
 			m_edit[1].DrawTextEdit( &hdc ) ;
+
+		RECT rc;
+		GetUpdateRect(&rc, TRUE);
+		m_page.OnPaint(&hdc, rc);
+
 		::ReleaseDC( GetSafeHwnd() , hdc ) ;
 		ReleaseDC( cdc );
 
@@ -161,12 +209,18 @@ void CKKControlDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	if( m_btn[0].OnLButtonDown( (POINT)point  ) )
 	{
 		index = 0 ;//
+		return;
 	}
 	else if( m_btn[1].OnLButtonDown( (POINT)point  ) )
 	{
 		index = 1 ;//
+		return;
 	}
 	
+	if (m_page.OnLButtonDown((POINT)point))
+	{
+		return;
+	}
 
 	CDC* cdc = GetDC() ;
 	HDC hdc =  cdc->GetSafeHdc() ;
@@ -193,7 +247,8 @@ void CKKControlDlg::OnMouseMove(UINT nFlags, CPoint point)
 	m_btn[0].OnMouseHover( ( POINT)point ) ;
 	m_btn[1].OnMouseLeave( ( POINT)point ) ;
 	m_btn[1].OnMouseHover( ( POINT)point ) ;
-
+	m_page.OnMouseLeave((POINT)point);
+	m_page.OnMouseHover((POINT)point);
 
 	CDC* cdc = GetDC() ;
 	HDC hdc =  cdc->GetSafeHdc() ;
@@ -211,8 +266,10 @@ void CKKControlDlg::OnLButtonUp(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	m_btn[0].OnLButtonUp( (POINT)point  );
 	m_btn[1].OnLButtonUp( (POINT)point  ) ;
+	m_page.OnLButtonUp((POINT)point);
 	m_edit[1].OnLbuttonUp() ;
 	m_edit[0].OnLbuttonUp() ;
+	
 	CDialogEx::OnLButtonUp(nFlags, point);
 }
 

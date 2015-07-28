@@ -7,6 +7,7 @@
 #include "Common\memUIButton.h"
 #include "Common\memUIEdit.h"
 #include "loadgif\BaseGif.h"
+#include "Common\memUIPage.h"
 
 // CKKControlDlg ¶Ô»°¿ò
 class CKKControlDlg : public CDialogEx
@@ -36,7 +37,7 @@ private:
 	CMMUIButton m_btn[2] ;
 	CMMUIEdit	m_edit[2] ;
 	CGifContrl	m_gif[2];
-	
+	CUIPage		m_page;
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);

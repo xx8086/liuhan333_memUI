@@ -77,7 +77,7 @@ bool CMMUIBase::InPoint(RECT rc_0, POINT pt)
 	return false ;
 }
 
-void	CMMUIBase::OnFlushContrl(   bool brf )
+void	CMMUIBase::OnFlushContrl(bool brf)
 {
 	::InvalidateRect( m_hwnd ,&m_rc , brf ) ;
 	::UpdateWindow( m_hwnd ) ;
