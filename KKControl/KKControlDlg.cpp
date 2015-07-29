@@ -172,8 +172,6 @@ void CKKControlDlg::OnPaint()
 	{
 		CDC* cdc = GetDC() ;
 		HDC hdc =  cdc->GetSafeHdc() ;
-		//CRect rect;
-		//GetClientRect(&rect);
 
 		RECT rc;
 		GetUpdateRect(&rc, TRUE);
@@ -223,8 +221,6 @@ void CKKControlDlg::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 
-
-
 	CDC* cdc = GetDC() ;
 	HDC hdc =  cdc->GetSafeHdc() ;
 
@@ -238,8 +234,6 @@ void CKKControlDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	::ReleaseDC( GetSafeHwnd() , hdc ) ;
 	ReleaseDC( cdc );
-
-
 
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
@@ -360,7 +354,7 @@ BOOL CKKControlDlg::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 在此添加专用代码和/或调用基类
 
-	EditOperator( pMsg  ) ;
+	EditOperator(pMsg) ;
 
 	return CDialogEx::PreTranslateMessage(pMsg) ;
 }

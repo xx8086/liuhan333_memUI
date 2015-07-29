@@ -404,8 +404,8 @@ bool CMMUIEdit::OnLButtonDown(const HDC* phdc, const POINT pt)
 	m_bLBttonDown = true;
 	m_iMoveMin = m_iMoveMax = m_iLButtonDown  ;
 	
+	m_bActive = true;
 	SetFocus();
-	m_bActive = false;
 	SetCaretNewPos( ) ;
 	DrawTextEdit( phdc ) ;
 	//OnFlushContrl() ;
@@ -492,7 +492,7 @@ void CMMUIEdit::DrawDefaultText( const HDC* phdc , TCHAR* tc )
 
 void CMMUIEdit::DrawTextEdging( const HDC* phdc , int shitfing  ) 
 {
-	return ;
+//	return ;
 
 	RECT rc ;
 	rc = m_rc ;	
