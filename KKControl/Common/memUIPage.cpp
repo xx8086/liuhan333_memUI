@@ -7,6 +7,7 @@ m_hWnd(NULL),
 m_iPageAmount(0), 
 m_iAllShowPage(0),
 m_iCurrentIndex(0),
+m_iOldIndex(0),
 m_pPageButton(NULL), 
 m_bHaveExButton(false),
 m_bHaveOmit(false),
@@ -83,12 +84,13 @@ int	CUIPage::ClickPrevButton()
 	int iPrevIndex = m_iCurrentIndex - 1;
 	if (!m_bHaveOmit)
 	{
-		JUDGETRUE(ClickPage(iPrevIndex),0);
+		JUDGETRUE(!ClickPage(iPrevIndex),0);
 		return iPrevIndex;
 	}
 	//1 ... [x] x+1 y-1  y ... [max]
 	//当m_iCurrentIndex为x或者max时候会触发...改变,其他情况不会；
-	JUDGETRUE(ClickPage(iPrevIndex), 0);
+	JUDGETRUE(!ClickPage(iPrevIndex), 0);
+	(m_pPageButton + iPrevIndex)->SetStatus(STATUS_OVER);
 	return iPrevIndex;
 }
 
@@ -101,10 +103,11 @@ int	CUIPage::ClickNextButton()
 	int iNextIndex = m_iCurrentIndex + 1;
 	if (!m_bHaveOmit)
 	{
-		JUDGETRUE(ClickPage(iNextIndex), 0);
+		JUDGETRUE(!ClickPage(iNextIndex), 0);
 		return iNextIndex;
 	}
-	JUDGETRUE(ClickPage(iNextIndex), 0);
+	JUDGETRUE(!ClickPage(iNextIndex), 0);
+	(m_pPageButton + iNextIndex)->SetStatus(STATUS_OVER);
 	return iNextIndex;
 }
 bool	CUIPage::OmitChange(int index)
@@ -152,6 +155,7 @@ bool	CUIPage::InitCurrentPage()
 	}
 	m_pPageArray[m_iAllShowPage-1] = m_iPageAmount;
 	m_iCurrentIndex = 0;
+	(m_pPageButton + m_iCurrentIndex)->SetCurrentStatus(STATUS_OVER);
 	return true;
 }
 
@@ -159,8 +163,18 @@ bool	CUIPage::ClickPage(int index)
 {
 	JUDGETRUE(index < 0, false);
 	JUDGETRUE(index >= m_iAllShowPage, false);
-	m_iCurrentIndex = index;
 
+	if (m_iCurrentIndex != index)
+	{
+		m_iOldIndex = m_iCurrentIndex;
+		m_iCurrentIndex = index;
+		(m_pPageButton + m_iOldIndex)->SetStatus(STATUS_NORMAL);
+	}
+	else
+	{
+		return false;
+	}
+	
 	if (!m_bHaveOmit)
 		return true;
 	
@@ -177,11 +191,41 @@ bool	CUIPage::ClickPage(int index)
 	return true;
 }
 
+bool	CUIPage::DrawExButton(const HDC* phdc, RECT rc, PATE_TYPE ptype)
+{
+	JUDGETRUE((PATE_TYPE_NEXT != ptype && PATE_TYPE_PREV!= ptype), false)
+		TCHAR pText[56] = { 0 };
+
+	RECT _rc = rc;
+	HDC* _phdc = NULL;
+	if (CMMUIBaseTextOut::GetTextOutmemDC(phdc, _phdc, _rc))
+	{
+		if (PATE_TYPE_PREV == ptype)
+		{
+			_stprintf_s(pText, 56, _T("<"));
+			m_PrevButton.OnPaintDirect(_phdc, _rc);
+		}
+		else if (PATE_TYPE_NEXT == ptype)
+		{
+			_stprintf_s(pText, 56, _T(">"));
+			m_NextButton.OnPaintDirect(_phdc, _rc);
+		}
+			
+
+		CMMUIBaseTextOut::DrawTextOut(phdc, rc, pText);
+	}
+	else
+	{
+		return false;
+	}
+
+	return true;
+}
 
 bool	CUIPage::DrawPage(const HDC* phdc, RECT rc, int index)
 {
 	JUDGETRUE(index<0,false)
-		JUDGETRUE(m_iAllShowPage <= index, false)
+	JUDGETRUE(m_iAllShowPage <= index, false)
 	TCHAR pText[56] = { 0 };
 	if (0 == m_pPageArray[index])
 		_stprintf_s(pText, 56, _T("..."));
@@ -190,8 +234,17 @@ bool	CUIPage::DrawPage(const HDC* phdc, RECT rc, int index)
 		_stprintf_s(pText, 56, _T("%d"), m_pPageArray[index]);
 	}
 
-	m_pPageButton[index].OnPaint(phdc, rc);
-	CMMUIBaseTextOut::DrawTextOut(phdc, rc, pText);
+	RECT _rc = rc;
+	HDC* _phdc = NULL;
+	if (CMMUIBaseTextOut::GetTextOutmemDC(phdc, _phdc, _rc))
+	{
+		m_pPageButton[index].OnPaintDirect(_phdc, _rc);//index == m_iCurrentIndex
+		CMMUIBaseTextOut::DrawTextOut(phdc, rc, pText);
+	}
+	else
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -228,6 +281,7 @@ bool    CUIPage::OnLButtonDown(POINT pt)
 	{
 		return false;
 	}
+
 
 	if (PATE_TYPE_PREV == ptype)
 	{
@@ -268,11 +322,44 @@ bool    CUIPage::OnLButtonUp(POINT pt)
 	{
 		(m_pPageButton + index)->OnLButtonUp(pt);
 	}
+	else
+	{
+		;
+	}
 
 	return true;
 }
+
+bool	CUIPage::NormalPage(POINT pt)
+{
+	if (m_MousePostion.pageType == PATE_TYPE_PREV)
+	{
+		m_PrevButton.OnMouseLeave(pt);
+	}
+	else if (m_MousePostion.pageType == PATE_TYPE_NEXT)
+	{
+		m_NextButton.OnMouseLeave(pt);
+	}
+	else if (m_MousePostion.pageType == PATE_TYPE_DIGIT)
+	{
+		JUDGETRUE((m_MousePostion.iVlue == -1 || m_MousePostion.iVlue == m_iCurrentIndex), false)
+		(m_pPageButton + m_MousePostion.iVlue)->OnMouseLeave(pt);
+	}
+	else
+	{
+		m_PrevButton.OnMouseLeave(pt);
+		m_NextButton.OnMouseLeave(pt);
+		JUDGETRUE((m_MousePostion.iVlue == -1 || m_MousePostion.iVlue == m_iCurrentIndex), false)
+		(m_pPageButton + m_MousePostion.iVlue)->OnMouseLeave(pt);
+	}
+	return true;
+}
+
 bool    CUIPage::OnMouseLeave(POINT pt)
 {
+	if (m_MousePostion.pageType == PATE_TYPE_NULL)
+		return false;
+
 	int index = -1;
 	PATE_TYPE ptype = PointIndex(pt, index);
 	if (PATE_TYPE_OMIT == ptype || PATE_TYPE_NULL == ptype)
@@ -280,19 +367,16 @@ bool    CUIPage::OnMouseLeave(POINT pt)
 		return false;
 	}
 
-	if (PATE_TYPE_PREV == ptype)
+	if ((PATE_TYPE_OMIT == ptype || PATE_TYPE_NULL == ptype)||
+		(PATE_TYPE_PREV == ptype && m_MousePostion.pageType == PATE_TYPE_PREV)||
+		(PATE_TYPE_NEXT == ptype && m_MousePostion.pageType == PATE_TYPE_NEXT)||
+		(PATE_TYPE_DIGIT == ptype && m_MousePostion.pageType == PATE_TYPE_DIGIT && m_MousePostion.iVlue == index))
 	{
-		m_PrevButton.OnMouseLeave(pt);
-	}
-	else if (PATE_TYPE_NEXT == ptype)
-	{
-		m_NextButton.OnMouseLeave(pt);
-	}
-	else if (PATE_TYPE_DIGIT == ptype)
-	{
-		(m_pPageButton + index)->OnMouseLeave(pt);
+		return false;
 	}
 
+	NormalPage(pt);
+	
 	return true;
 }
 bool    CUIPage::OnMouseHover(POINT pt)
@@ -306,17 +390,29 @@ bool    CUIPage::OnMouseHover(POINT pt)
 
 	if (PATE_TYPE_PREV == ptype)
 	{
+		JUDGETRUE(m_MousePostion.pageType == PATE_TYPE_PREV, false)
+		m_MousePostion.pageType = PATE_TYPE_PREV;
 		m_PrevButton.OnMouseHover(pt);
 	}
 	else if (PATE_TYPE_NEXT == ptype)
 	{
+		JUDGETRUE(m_MousePostion.pageType == PATE_TYPE_NEXT, false)
+		m_MousePostion.pageType = PATE_TYPE_NEXT;
 		m_NextButton.OnMouseHover(pt);
 	}
 	else if (PATE_TYPE_DIGIT == ptype)
 	{
+		JUDGETRUE((m_MousePostion.pageType == PATE_TYPE_DIGIT && m_MousePostion.iVlue == index), false)
+		m_MousePostion.pageType = PATE_TYPE_DIGIT;
+		m_MousePostion.iVlue = index;
 		(m_pPageButton + index)->OnMouseHover(pt);
 	}
-
+	else
+	{
+		if (m_MousePostion.pageType != PATE_TYPE_NULL)
+			m_MousePostion.pageType = PATE_TYPE_NULL;
+		return false;
+	}
 	return true;
 }
 
@@ -348,6 +444,11 @@ PATE_TYPE		CUIPage::PointIndex(POINT pt, int& index)
 
 PATE_TYPE		CUIPage::RectIndex(RECT rc, int& index)
 {
+	if ((m_pPageButton + 0)->InRECT(rc, m_rc))
+	{
+		return PATE_TYPE_ALL;
+	}
+
 	PATE_TYPE ptype = PATE_TYPE_NULL;
 	if (m_bHaveExButton)
 	{
@@ -381,25 +482,36 @@ bool	CUIPage::OnPaint(const HDC* phdc, RECT rc)
 		return false;
 	}
 
-	if (PATE_TYPE_PREV == ptype)
+	if (PATE_TYPE_ALL == ptype)
 	{
-		m_PrevButton.OnPaint(phdc, rc);
+		DrawExButton(phdc, m_PrevButton.GetRect(), PATE_TYPE_PREV);
+		DrawExButton(phdc, m_NextButton.GetRect(), PATE_TYPE_NEXT);
+		//m_PrevButton.OnPaint(phdc, rc);
+		//m_NextButton.OnPaint(phdc, rc);
+		for (int i = 0; i < m_iAllShowPage; i++)
+		{
+			DrawPage(phdc, (m_pPageButton + i)->GetRect(), i);
+		}
+
+		return true;
 	}
-	else if (PATE_TYPE_NEXT == ptype)
-	{
-		m_NextButton.OnPaint(phdc, rc);
-	}
-	else if (PATE_TYPE_DIGIT == ptype && !m_bAllPaint)
+
+	if (PATE_TYPE_DIGIT == ptype && !m_bAllPaint)
 	{
 		DrawPage(phdc, rc, index);
+	}
+	else if (PATE_TYPE_NEXT == ptype || PATE_TYPE_PREV == ptype)
+	{
+		DrawExButton(phdc, rc, ptype);
 	}
 
 	if (m_bAllPaint)
 	{
 		for (int i = 0; i < m_iAllShowPage; i++)
 		{
-			DrawPage(phdc, rc, i);
+			DrawPage(phdc, (m_pPageButton + i)->GetRect(), i);
 		}
+
 	}
 
 	return true;

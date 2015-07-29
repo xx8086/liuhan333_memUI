@@ -38,3 +38,8 @@ bool	CMMUIButton::OnPaint( const HDC* phdc , RECT rc )
 	}
 	return rt ;
 }
+bool	CMMUIButton::OnPaintDirect(const HDC* phdc, RECT rc)
+{
+	m_BTNImage.DrawImage(phdc, GetCurrentStatus(), rc);
+	return true;
+}

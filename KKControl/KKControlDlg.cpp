@@ -53,9 +53,9 @@ BOOL CKKControlDlg::OnInitDialog()
 	ItemStatusImage isi  ;
 	isi.iItemStatusAmount = 3 ; 
 
-	_stprintf_s(isi.path[0], MAX_PATH, _T("\\..\\skin\\play_normal.png"));
-	_stprintf_s(isi.path[1], MAX_PATH, _T("\\..\\skin\\play_hover.png"));
-	_stprintf_s(isi.path[2], MAX_PATH, _T("\\..\\skin\\play_click.png"));
+	_stprintf_s(isi.path[STATUS_NORMAL], MAX_PATH, _T("\\..\\skin\\play_normal.png"));
+	_stprintf_s(isi.path[STATUS_OVER], MAX_PATH, _T("\\..\\skin\\play_hover.png"));
+	_stprintf_s(isi.path[STATUS_CLICK], MAX_PATH, _T("\\..\\skin\\play_click.png"));
 
 	RECT rc ;
 	SetRect( &rc , 50 , 50 , 50 + 203 , 50 + 40 ) ;
@@ -101,9 +101,9 @@ BOOL CKKControlDlg::OnInitDialog()
 
 
 	isi.iItemStatusAmount = 3;
-	_stprintf_s(isi.path[0], MAX_PATH, _T("\\..\\skin\\page_normal.png"));
-	_stprintf_s(isi.path[1], MAX_PATH, _T("\\..\\skin\\page_hover.png"));
-	_stprintf_s(isi.path[2], MAX_PATH, _T("\\..\\skin\\page_click.png"));
+	_stprintf_s(isi.path[STATUS_NORMAL], MAX_PATH, _T("\\..\\skin\\page_normal.png"));
+	_stprintf_s(isi.path[STATUS_OVER], MAX_PATH, _T("\\..\\skin\\page_hover.png"));
+	_stprintf_s(isi.path[STATUS_CLICK], MAX_PATH, _T("\\..\\skin\\page_click.png"));
 
 	POINT ptPage;
 	ptPage.x = 30;
@@ -172,18 +172,19 @@ void CKKControlDlg::OnPaint()
 	{
 		CDC* cdc = GetDC() ;
 		HDC hdc =  cdc->GetSafeHdc() ;
-		CRect rect;
-		GetClientRect(&rect);
-		m_btn[0].OnPaint( &hdc , rect ) ;
-		m_btn[1].OnPaint( &hdc , rect ) ;
+		//CRect rect;
+		//GetClientRect(&rect);
+
+		RECT rc;
+		GetUpdateRect(&rc, TRUE);
+		m_btn[0].OnPaint(&hdc, rc);
+		m_btn[1].OnPaint(&hdc, rc);
 
 		if( m_edit[0].GetActive())
 			m_edit[0].DrawTextEdit( &hdc ) ;
 		if( m_edit[1].GetActive() )
 			m_edit[1].DrawTextEdit( &hdc ) ;
 
-		RECT rc;
-		GetUpdateRect(&rc, TRUE);
 		m_page.OnPaint(&hdc, rc);
 
 		::ReleaseDC( GetSafeHwnd() , hdc ) ;
@@ -216,11 +217,13 @@ void CKKControlDlg::OnLButtonDown(UINT nFlags, CPoint point)
 		index = 1 ;//
 		return;
 	}
-	
+
 	if (m_page.OnLButtonDown((POINT)point))
 	{
 		return;
 	}
+
+
 
 	CDC* cdc = GetDC() ;
 	HDC hdc =  cdc->GetSafeHdc() ;
@@ -235,6 +238,8 @@ void CKKControlDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	::ReleaseDC( GetSafeHwnd() , hdc ) ;
 	ReleaseDC( cdc );
+
+
 
 	CDialogEx::OnLButtonDown(nFlags, point);
 }

@@ -11,7 +11,7 @@ public:
 public:
 	void	InitBtn(HWND hwnd , RECT rc , ItemStatusImage isi)  ;
 	bool	OnPaint(const HDC* phdc , RECT rc) ;
-
+	bool	OnPaintDirect(const HDC* phdc, RECT rc);
 private:
 	CUIImage m_BTNImage ;
 };

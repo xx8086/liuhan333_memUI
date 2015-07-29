@@ -83,6 +83,17 @@ void	CMMUIBase::OnFlushContrl(bool brf)
 	::UpdateWindow( m_hwnd ) ;
 }
 
+bool	CMMUIBase::SetStatus(ITEM_STATUS is)
+{
+	if (is != STATUS_NORMAL &&
+		is != STATUS_OVER &&
+		is != STATUS_CLICK)
+		return false;
+
+	m_currentStatus = is;
+	OnFlushContrl();
+	return true;
+}
 bool   CMMUIBase::OnMouseLeave(POINT pt)
 {
 	bool rt = false ;
@@ -112,7 +123,7 @@ bool    CMMUIBase::OnLButtonDown(POINT pt)
 bool    CMMUIBase::OnMouseHover(POINT pt)
 {
 	bool rt = false ;
-	if( m_statusAmount > (int)STATUS_OVER && InPoint( m_rc , pt )  )
+	if( m_statusAmount > (int)STATUS_OVER && InPoint( m_rc , pt ) )
 	{
 		m_currentStatus = STATUS_OVER ;
 		OnFlushContrl() ;
@@ -166,3 +177,14 @@ bool	CMMUIBase::OnPaint(const RECT  rc)
 	}
 	return dwReturn;	
 }
+
+ bool CMMUIBase::SetCurrentStatus(ITEM_STATUS is)
+ { 
+	 if (STATUS_NORMAL != is &&
+		 STATUS_OVER != is &&
+		 STATUS_CLICK != is)
+		 return false;
+
+	 m_currentStatus = is; 
+	 return true;
+ }

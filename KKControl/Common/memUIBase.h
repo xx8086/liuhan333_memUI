@@ -20,6 +20,7 @@ public:
 public:
 	//void ChangeRect(RECT rc){ m_rc = rc; }
 	RECT GetRect(){return m_rc ;} 
+	bool SetCurrentStatus(ITEM_STATUS is);
 	ITEM_STATUS GetCurrentStatus(){ return m_currentStatus ; } ;
 
 public:
@@ -30,6 +31,7 @@ public:
 	virtual bool    OnMouseHover(POINT pt);
 
 	virtual bool	OnPaint(const RECT  rc);
+	virtual bool	SetStatus(ITEM_STATUS is);
 public:
 	RECT		m_rc ;
 	HWND		m_hwnd ;

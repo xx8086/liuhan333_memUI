@@ -56,7 +56,7 @@ bool	CMMUIBaseTextOut::SetFontColo(COLORREF fontColo)
 	return true;
 }
 
-bool	CMMUIBaseTextOut::DrawTextOut(const HDC* phdc, RECT rc, TCHAR* pText)
+bool	CMMUIBaseTextOut::GetTextOutmemDC(const HDC* phdc, HDC*& pmemhdc, RECT& rc)
 {
 	RECT _rc;
 	_rc.left = _rc.top = 0;
@@ -69,6 +69,18 @@ bool	CMMUIBaseTextOut::DrawTextOut(const HDC* phdc, RECT rc, TCHAR* pText)
 		m_memBitmap = CreateCompatibleBitmap(*phdc, _rc.right, _rc.bottom);
 	if (m_hOldbitmap == NULL)
 		m_hOldbitmap = (HBITMAP)SelectObject(m_memDC, m_memBitmap);
+	
+	pmemhdc = &m_memDC;
+	rc = _rc;
+
+	return true;
+}
+
+bool	CMMUIBaseTextOut::DrawTextOut(const HDC* phdc, RECT rc, TCHAR* pText)
+{
+	RECT _rc = rc;
+	HDC* _phdc = NULL;
+	GetTextOutmemDC(phdc, _phdc, _rc);
 
 	HBRUSH hBrush;
 	if (m_bBKBlush)
@@ -81,11 +93,12 @@ bool	CMMUIBaseTextOut::DrawTextOut(const HDC* phdc, RECT rc, TCHAR* pText)
 	if (m_bfontBK)
 		oldBKColo = SetBkColor(m_memDC, m_fontBKColo);
 
-	COLORREF oldTextColo = SetTextColor(m_memDC, m_fontColo);
-	int ildBkMode = SetBkMode(m_memDC, OPAQUE);
-	::TextOut(m_memDC, 0, 0, pText, _tcslen(pText));
+	//COLORREF oldTextColo = SetTextColor(m_memDC, m_fontColo);
+	int ildBkMode = SetBkMode(m_memDC, TRANSPARENT);
+	//::TextOut(m_memDC, 0, 0, pText, _tcslen(pText));
+	int ilen = DrawText(m_memDC, pText, -1, &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	SetBkMode(m_memDC, ildBkMode);
-	SetTextColor(m_memDC, oldTextColo);
+	//SetTextColor(m_memDC, oldTextColo);
 	
 	if (m_bfontBK)
 		SetBkColor(m_memDC, oldBKColo);
@@ -94,7 +107,7 @@ bool	CMMUIBaseTextOut::DrawTextOut(const HDC* phdc, RECT rc, TCHAR* pText)
 		DeleteObject(hBrush);
 	}
 
-	BitBlt(*phdc, rc.left, rc.top, _rc.right - 2, _rc.bottom,
+	BitBlt(*phdc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
 		m_memDC, 0, 0, SRCCOPY);
 
 	return true;

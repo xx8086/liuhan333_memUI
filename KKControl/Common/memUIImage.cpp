@@ -42,20 +42,19 @@ void CUIImage::InitImage(  ItemStatusImage isi )
 	}	
 }
 
-BOOL CUIImage::DrawImage(  const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc  )
+bool CUIImage::DrawImage(  const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc  )
 {
 	//Graphics graphics( *phdc ) ;
 	//Status ss ;
 	//ss = graphics.DrawImage( m_Image[is] , rc.left ,  rc.top ) ;
 	//graphics.ReleaseHDC( *phdc ) ;
 
-	BOOL bk = FALSE ;
 	if( m_cImage[ iStatus ] == NULL || m_cImage[ iStatus ]->IsNull() )
-		return bk;
-	bk = m_cImage[ iStatus ]->Draw( *phdc , rc  ) ;
+		return false;
+	if (!m_cImage[iStatus]->Draw(*phdc, rc))
+		return false;
 
-
-	return bk ;
+	return true ;
 }
 
 HRESULT CUIImage::InitImageName( TCHAR * imgName , ITEM_STATUS iStatus ) 

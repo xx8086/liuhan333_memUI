@@ -9,7 +9,7 @@ public:
 	~CUIImage( void ) ;
 public:
 	void InitImage(  ItemStatusImage isi ) ;
-	BOOL DrawImage( const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc ) ;
+	bool DrawImage( const HDC* phdc ,  ITEM_STATUS iStatus , RECT rc ) ;
 private:
 	HRESULT InitImageName( TCHAR * imgName , ITEM_STATUS iStatus ) ;
 private:

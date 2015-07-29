@@ -10,8 +10,16 @@ typedef enum PageType
 	PATE_TYPE_PREV	= 1,
 	PATE_TYPE_NEXT	= 2,
 	PATE_TYPE_DIGIT = 3,
-	PATE_TYPE_NULL	= 4,
+	PATE_TYPE_ALL	= 4,
+	PATE_TYPE_NULL	= 5,
 }PATE_TYPE;
+
+typedef struct PageHover
+{
+	PATE_TYPE	pageType;
+	int			iVlue;
+	PageHover() :pageType(PATE_TYPE_NULL), iVlue(-1){}
+}PAGE_HOVER;
 
 struct PageRes
 {
@@ -60,14 +68,16 @@ public:
 private:
 	bool	OmitChange(int index);
 	bool	InitCurrentPage();//m_iCurrentIndex = 1
+	bool	DrawExButton(const HDC* phdc, RECT rc, PATE_TYPE ptype);
 	bool	DrawPage(const HDC* phdc, RECT rc, int index);
-
+	bool	NormalPage(POINT pt);
 	PATE_TYPE		PointIndex(POINT pt, int& index);
 	PATE_TYPE		RectIndex(RECT rc, int& index);
 private:
 	HWND				m_hWnd;
 	int					m_iPageAmount;//页数
 	int					m_iCurrentIndex;//当按钮号
+	int					m_iOldIndex;//当按钮号
 	int					m_iAllShowPage;//页数加省略号一共需要显示的页签
 	int*				m_pPageArray;//页情况
 	bool				m_bHaveExButton;
@@ -78,6 +88,7 @@ private:
 	CMMUIButton			m_PrevButton;
 	CMMUIButton			m_NextButton;
 	CMMUIButton			m_OmitButton;
+	PAGE_HOVER			m_MousePostion;
 };
 //*m_ppPageArray[1]					永远为1
 //*m_ppPageArray[2]					为2或者...

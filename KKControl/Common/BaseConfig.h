@@ -25,9 +25,9 @@
 #define ID_KUKE_MENU_X                  32776
 #define ID_KUKE_MENU_V                  32777
 
-#define JUDGENULL(p,rt)			if(NULL == p){return rt;} 
-#define	JUDGETRUE(p,rt)			if(true == p){return rt;}
-#define DELETEPOINT(P)			if(NULL != p){delete p; p = NULL;}
+#define JUDGENULL(p,rt)			if(NULL == (p)){return rt;} 
+#define	JUDGETRUE(p,rt)			if(true == (p)){return rt;}
+#define DELETEPOINT(P)			if(NULL != (p)){delete p; p = NULL;}
 
 typedef enum EditType
 {
