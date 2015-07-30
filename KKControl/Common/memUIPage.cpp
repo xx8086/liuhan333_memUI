@@ -90,7 +90,10 @@ int	CUIPage::ClickPrevButton()
 	//1 ... [x] x+1 y-1  y ... [max]
 	//当m_iCurrentIndex为x或者max时候会触发...改变,其他情况不会；
 	JUDGETRUE(!ClickPage(iPrevIndex), 0);
-	(m_pPageButton + iPrevIndex)->SetStatus(STATUS_OVER);
+	
+	if (iPrevIndex == m_iCurrentIndex)
+		(m_pPageButton + iPrevIndex)->SetStatus(STATUS_OVER);
+
 	return iPrevIndex;
 }
 
@@ -107,24 +110,72 @@ int	CUIPage::ClickNextButton()
 		return iNextIndex;
 	}
 	JUDGETRUE(!ClickPage(iNextIndex), 0);
-	(m_pPageButton + iNextIndex)->SetStatus(STATUS_OVER);
+	if (iNextIndex == m_iCurrentIndex)
+		(m_pPageButton + iNextIndex)->SetStatus(STATUS_OVER);
 	return iNextIndex;
 }
-bool	CUIPage::OmitChange(int index)
+bool	CUIPage::OmitChange(int& index)
 {
 	int iValue;
-	if (0 == index || 2 == index)
+	if (0 == index)
 	{
+		JUDGETRUE(m_pPageArray[1] != 0, false)
 		iValue = 3;
 		m_pPageArray[1] = 2;
 		m_pPageArray[m_iAllShowPage - 2] = 0;
 	}
-	else if (m_iAllShowPage - 1 == index || m_iAllShowPage - 3 == index)
+	else if (m_iAllShowPage - 1 == index)//
 	{
+		JUDGETRUE(m_pPageArray[m_iAllShowPage - 2] != 0, false)
 		iValue = m_iPageAmount - m_iAllShowPage + 3;
 		m_pPageArray[1] = 0;
 		m_pPageArray[m_iAllShowPage - 2] = m_iPageAmount-1;
 	}
+	else if (2 == index)
+	{
+		JUDGETRUE(m_pPageArray[1] != 0, false)
+		int iMid = m_iAllShowPage / 2;
+		if (iMid >= m_pPageArray[2])
+		{
+			m_pPageArray[1] = 2;
+			iValue = 3;
+			index = m_pPageArray[2] -1;
+			m_pPageArray[m_iAllShowPage - 2] = 0;
+		}
+		else
+		{
+			iValue = m_pPageArray[2]-(iMid - 2);
+			index = iMid;
+			if (m_iAllShowPage - 2 < m_iPageAmount - iValue)
+				m_pPageArray[m_iAllShowPage - 2] = 0;
+		}
+	}
+	else if (m_iAllShowPage - 3 == index)
+	{
+		JUDGETRUE(m_pPageArray[m_iAllShowPage - 2] != 0, false)
+		
+		int iMid = m_iAllShowPage / 2;
+		if ((m_pPageArray[m_iAllShowPage - 3] + iMid - 1) > m_iPageAmount)
+		{
+			index = m_iAllShowPage -1 - (m_iPageAmount - m_pPageArray[m_iAllShowPage - 3]);
+			m_pPageArray[1] = 0;
+			m_pPageArray[m_iAllShowPage - 2] = m_iPageAmount - 1;
+			iValue = m_iPageAmount - (m_iAllShowPage - 3);
+		}
+		else
+		{
+			index = iMid;
+			iValue = m_pPageArray[2] + m_pPageArray[m_iAllShowPage - 3] - m_pPageArray[iMid];
+			if (iValue >3)
+				m_pPageArray[1] = 0;
+		}
+
+	}
+	else
+	{
+		return false;
+	}
+
 	for (int i = 2; i <= m_iAllShowPage - 3; i++)
 	{
 		m_pPageArray[i] = iValue++;
@@ -178,14 +229,18 @@ bool	CUIPage::ClickPage(int index)
 	if (!m_bHaveOmit)
 		return true;
 	
-	if (m_pPageArray[1] == 0 && (index == 0 || index == 2))
-	{// 0, 1, 2
-		OmitChange(0);
-	}
-	else if (m_pPageArray[m_iAllShowPage - 2] == 0 && 
-		(index == m_iAllShowPage - 3 || index == m_iAllShowPage - 1))
-	{// m_iAllShowPage - 3, m_iAllShowPage - 2, m_iAllShowPage - 1
-		OmitChange(m_iAllShowPage - 1);
+	if ((m_pPageArray[1] == 0 && (index == 0 || index == 2)) ||
+		(m_pPageArray[m_iAllShowPage - 2] == 0 &&
+		(index == m_iAllShowPage - 3 || index == m_iAllShowPage - 1)))
+	{
+		int iClickBtn = index;
+		OmitChange(iClickBtn);
+		if (iClickBtn != index)
+		{
+			m_iCurrentIndex = iClickBtn;
+			(m_pPageButton + m_iCurrentIndex)->SetCurrentStatus(STATUS_OVER);
+			m_iOldIndex = m_iCurrentIndex;
+		}
 	}
 
 	return true;
@@ -364,7 +419,7 @@ bool    CUIPage::OnMouseLeave(POINT pt)
 	PATE_TYPE ptype = PointIndex(pt, index);
 	if (PATE_TYPE_OMIT == ptype || PATE_TYPE_NULL == ptype)
 	{
-		return false;
+		return OnLeaveNormal();
 	}
 
 	if ((PATE_TYPE_OMIT == ptype || PATE_TYPE_NULL == ptype)||
@@ -379,6 +434,33 @@ bool    CUIPage::OnMouseLeave(POINT pt)
 	
 	return true;
 }
+
+bool 		CUIPage::OnLeaveNormal()
+{
+	if (m_MousePostion.pageType == PATE_TYPE_PREV)
+	{
+		m_PrevButton.SetCurrentStatus(STATUS_NORMAL);
+		m_PrevButton.OnFlushContrl();
+	}
+	else if (m_MousePostion.pageType == PATE_TYPE_NEXT)
+	{
+		m_NextButton.SetCurrentStatus(STATUS_NORMAL);
+		m_NextButton.OnFlushContrl();
+	}
+	else if (m_MousePostion.pageType == PATE_TYPE_DIGIT)
+	{
+		if (m_MousePostion.iVlue == m_iCurrentIndex)
+			return false;
+
+		(m_pPageButton + m_MousePostion.iVlue)->SetCurrentStatus(STATUS_NORMAL);
+		(m_pPageButton + m_MousePostion.iVlue)->OnFlushContrl();
+	}
+
+	m_MousePostion.pageType = PATE_TYPE_NULL;
+
+	return true;
+}
+
 bool    CUIPage::OnMouseHover(POINT pt)
 {
 	int index = -1;

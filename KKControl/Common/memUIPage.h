@@ -66,7 +66,8 @@ public:
 	// bool	OnPaint(const RECT  rc);
 	bool	OnPaint(const HDC* phdc, RECT rc);
 private:
-	bool	OmitChange(int index);
+	bool	OnLeaveNormal();//确保鼠标离开page的时候非当前click页职位normal
+	bool	OmitChange(int& index);
 	bool	InitCurrentPage();//m_iCurrentIndex = 1
 	bool	DrawExButton(const HDC* phdc, RECT rc, PATE_TYPE ptype);
 	bool	DrawPage(const HDC* phdc, RECT rc, int index);
@@ -90,7 +91,7 @@ private:
 	CMMUIButton			m_OmitButton;
 	PAGE_HOVER			m_MousePostion;
 };
-//*m_ppPageArray[1]					永远为1
-//*m_ppPageArray[2]					为2或者...
-//*m_ppPageArray[m_iAllShowPage]	永远为m_iPageAmount
-//*m_ppPageArray[m_iAllShowPage-1]	为m_iPageAmount-1或者...
+//*m_ppPageArray[0]					永远为1
+//*m_ppPageArray[1]					为2或者...
+//*m_ppPageArray[m_iAllShowPage-1]	永远为m_iPageAmount
+//*m_ppPageArray[m_iAllShowPage-2]	为m_iPageAmount-1或者...

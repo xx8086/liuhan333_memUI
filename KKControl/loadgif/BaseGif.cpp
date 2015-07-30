@@ -41,7 +41,7 @@
 		wcex.lpszClassName	= L"static";//szWindowClass;
 		wcex.hIconSm		= 0;// LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
-		bool r = RegisterClassEx(&wcex);
+		RegisterClassEx(&wcex);
 
 		m_hwnd = CreateWindow(L"static",NULL,WS_VISIBLE |WS_CHILD ,
 			ptBeginPostion.x, ptBeginPostion.y,
